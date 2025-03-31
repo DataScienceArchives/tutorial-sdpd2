@@ -1,0 +1,4 @@
+# IA escalable
+
+Esta parte incluye tutoriales sobre tecnologías para implementación de algoritmos
+y modelos de IA y aprendizaje máquina escalables y de alto rendimiento.

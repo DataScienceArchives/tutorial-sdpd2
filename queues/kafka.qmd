@@ -1,0 +1,5 @@
+# Apache Kafka
+
+Kafka es un sistema escalable para colas de mensajes de gran envergadura. Soporta
+particionado de datos, alta disponibilidad y replicabilidad, garantizando un caudal
+de datos (*throughput*) elevado y sostenido.

@@ -1,0 +1,5 @@
+# Quarto {#sec-quarto}
+
+Una tecnología para creación de documentos de programación literaria @knuth84 
+compatible con varios lenguajes (Python, R, Julia, Observable), capaz de generar 
+salida en varios formatos, por ejemplo, HTML o PDF (via LaTeX).

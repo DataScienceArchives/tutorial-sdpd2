@@ -1,0 +1,4 @@
+# Apache Spark
+
+Tutorial sobre instalación y configuración de Apache Spark, tecnología de referencia
+para procesamiento distribuido de datos.

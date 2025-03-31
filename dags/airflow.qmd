@@ -1,0 +1,5 @@
+# Apache Airflow
+
+Apache Airflow es una herramienta completa y potente para creación y gestión
+de *pipelines* de procesamiento de datos en Python. Soporta tareas escritas
+en otros lenguajes y está preparada para escalabilidad.

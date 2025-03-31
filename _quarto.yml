@@ -1,0 +1,57 @@
+project:
+  type: book
+  output-dir: public
+  resources:
+    - "css/"
+    - "js/"
+    - "*.html"
+  preview:
+    port: 9001
+    browser: true
+
+book:
+  title: "Tutorial - Sistemas Distribuidos de Procesamiento de Datos 2 - GCID - EIF"
+  author: "Felipe Ortega"
+  date: "2025/03/31"
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - part: dags/dags.qmd
+      chapters:
+        - dags/luigi.qmd
+        - dags/airflow.qmd
+    - part: queues/queues.qmd
+      chapters:
+        - queues/zmq.qmd
+        - queues/kafka.qmd
+        - queues/serial.qmd
+    - part: processing/processing.qmd
+      chapters:
+        - processing/spark.qmd
+        - processing/flink.qmd
+        - processing/dask.qmd
+    - part: sia/scalable-ia.qmd
+      chapters:
+        - sia/torch.qmd
+        - sia/tensorflow.qmd
+        - sia/llms.qmd
+        - sia/h2o.qmd
+    - summary.qmd
+    - references.qmd
+  appendices:
+    - app/uv.qmd
+    - app/podman.qmd
+    - app/vscode.qmd
+    - app/quarto.qmd
+
+  #repo-url: URL-REPO-GITLAB
+  #repo-actions: [source, edit, issue]
+
+lang: es
+bibliography: references.bib
+csl: ieee-with-url.csl
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css

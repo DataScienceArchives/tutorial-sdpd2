@@ -1,0 +1,4 @@
+# Colas de mensajes
+
+Esta parte incluye tutoriales para instalación y utilización de sistemas de colas
+de mensajes, que en muchos proyectos actúan como *Message Oriented Middleware* (MoM).

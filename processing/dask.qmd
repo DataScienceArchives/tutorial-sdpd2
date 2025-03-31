@@ -1,0 +1,3 @@
+# Dask
+
+Tutorial sobre Dask, una herramienta para procesamiento distribuido de datos en Python.

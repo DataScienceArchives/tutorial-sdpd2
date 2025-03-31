@@ -1,0 +1,4 @@
+# Podman
+
+Herramienta de gestión de contendores virtuales compatible con varias tecnologías como
+Docker y Kubernetes.

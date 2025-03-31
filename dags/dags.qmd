@@ -1,0 +1,5 @@
+# DAGs
+
+Esta parte incluye tutoriales sobre tecnologías para creación y gestión de
+Grafos Directos Acíclicos (DAGs, por sus siglas en inglés) que implementan
+*pipelines* de procesamiento de datos.

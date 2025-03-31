@@ -1,0 +1,3 @@
+# Astral uv
+
+Un gestor eficiente de entornos virtuales Python escrito en Rust.

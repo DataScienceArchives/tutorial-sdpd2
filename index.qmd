@@ -1,0 +1,8 @@
+# Prefacio {.unnumbered}
+
+Esta es una colección de tutoriales sobre herramientas y tecnologías utilizadas en la
+impartición de la asignatura *Sistemas Distribuidos de Procesamiento de Datos 2* del
+Grado en Ciencia e Ingeniería de Datos (EIF, URJC).
+
+Se ha desarrollado mediante la herramienta Quarto (véase @sec-quarto).
+Para aprender maś sobre Quarto visita <https://quarto.org/docs/books>.

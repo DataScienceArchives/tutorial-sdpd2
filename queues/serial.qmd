@@ -1,0 +1,4 @@
+# Serialización de datos
+
+Este capítulo recoge algunas tecnologías de serialización/aplanamiento de datos de alto
+rendimiento.
