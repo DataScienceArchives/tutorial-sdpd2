@@ -44,9 +44,6 @@ book:
     - app/vscode.qmd
     - app/quarto.qmd
 
-  repo-url: https://gitlab-pages.eif.urjc.es/tutorial-sdpd2-961f66/
-  repo-actions: [source, edit, issue]
-
 lang: es
 bibliography: references.bib
 csl: ieee-with-url.csl
