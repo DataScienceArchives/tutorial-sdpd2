@@ -44,8 +44,8 @@ book:
     - app/vscode.qmd
     - app/quarto.qmd
 
-  #repo-url: URL-REPO-GITLAB
-  #repo-actions: [source, edit, issue]
+  repo-url: https://gitlab-pages.eif.urjc.es/tutorial-sdpd2-961f66/
+  repo-actions: [source, edit, issue]
 
 lang: es
 bibliography: references.bib
