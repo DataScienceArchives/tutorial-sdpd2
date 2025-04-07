@@ -1,4 +1,276 @@
 # Podman
 
 Herramienta de gestión de contendores virtuales compatible con varias tecnologías como
-Docker y Kubernetes.
+Docker y Kubernetes. En la asignatura utilizamos dos programas:
+
+- `podman`: Es la herramienta básica para descargar imágenes, crear y gestionar contenedores.
+- `podman-compose`: Es un script que implementa la [Especificación Compose](https://compose-spec.io/)
+(*Compose Spec*) utilizando Podman como *backend*. Por ejemplo, permite utilizar en Podman
+archivos `docker-compose.yml` que siguen esta especificación.
+
+Una característica distintiva de Podman es que se centra en la creación de contenedores
+*rootless*, que no precisan de privilegios de superusuario para su generación y gestión.
+
+## Instalación
+
+::: {.callout-note}
+## Fuente
+*Podman Installation Instructions*: <https://podman.io/docs/installation>.
+:::
+
+### Ubuntu
+
+Para instalar Podman en **Ubuntu 24.04** ejecutamos en una terminal:
+
+```bash
+$ sudo apt install podman
+```
+
+Para instalar Podman Compose:
+
+```bash
+$ sudo apt install podman-compose
+```
+
+::: {.callout-caution}
+## Auto-configuración de Podman
+El instalador de Podman se encarga de ejecutar algunas acciones de configuración importantes durante 
+el proceso de instalación. En particular, efectúa una serie de operaciones de configuración a partir de la
+información de los usuarios y grupos ya registrados en el sistema, para que puedan descargar imágenes,
+ejecutar contenedores y otras operaciones de gestión *sin privilegios de superusuario*.
+
+Si instalas Podman y luego añades usuarios nuevos a tu sistema, puede que estos no puedan ejecutar Podman
+correctamente. Tendrás que solucionar manualmente el problema (ver enlace al final de esta llamada) o reinstalar de nuevo el paquete (sin eliminarlo) para
+que se vuelvan a efectuar esas operaciones de configuración necesarias para los nuevos usuarios.
+
+Más info: <https://github.com/containers/podman/blob/main/docs/tutorials/rootless_tutorial.md>
+:::
+
+## Operaciones básicas
+
+::: {.callout-note}
+## Fuente
+*Get Started with Podman*: <https://podman.io/get-started>.
+:::
+
+### Ayuda
+
+Podman consta de un comando principal `podman` y un conjunto de subcomandos, como `pull`, `search` o
+`run` (como ocurre con `git`). Podemos obtener ayuda sobre cómo ejecutar el comando principal o uno
+de los subcomandos desde la terminal.
+
+```bash
+$ podman --help
+$ podman <subcomando> --help
+```
+
+Si necesitamos más informción podemos consultar las páginas del manual.
+
+```bash
+$ man podman
+$ man podman-<subcomando>
+```
+::: {.callout-tip}
+Fíjate bien en que para abrir la página del manual de un subcomando de podman tienes que añadir un
+guión alto `-` entre `podman` y el nombre del subcomando.
+
+Por ejemplo: `man podman-pull`.
+:::
+
+### Descarga de imágenes
+
+La primera operación básica es descargar una imagen desde un repositorio de imágenes para creación de contenedores.
+Por ejemplo, una opción habitual es la biblioteca de imágenes de Docker: <https://hub.docker.com/>.
+
+Supongamos que queremos descargar la imágen del servidor HTTP Apache del repositorio oficial:
+
+- <https://hub.docker.com/_/httpd>
+
+Lo único que tenemos que recordar es que Podman no asume por defecto (salvo si lo configuramos para que se comporte así)
+que vamos a descargar una imagen de la biblioteca oficial de Docker. Así que tenemos que anteponer el prefijo
+`docker.io/` a la ruta que aparece en la documentación de Docker Hub para efectuar la operación `pull` y descargar la imagen.
+
+Teniendo esto en cuenta, descargamos la imagen usando Podman:
+
+```bash
+$ podman pull docker.io/library/httpd
+```
+
+Si no estamos seguros de qué imagen queremos descargar, se puede usar el subcomando `search` para buscar por palabra
+clave. Por ejemplo, para buscar imágenes que mencionen la cadena `httpd` en el registro de la biblioteca `docker.io`:
+
+```bash
+$ podman search docker.io/library/httpd
+```
+
+Una vez que descargues varias imágenes, puedes obtener una lista de todas las que has obtenido ya en tu máquina
+con el subcomando `images`.
+
+```bash
+$ podman images
+REPOSITORY                              TAG                IMAGE ID      CREATED        SIZE
+docker.io/apache/kafka                  latest             12b98f0f2c1f  2 weeks ago    427 MB
+docker.io/library/postgres              16-alpine          1e8624fe3776  6 weeks ago    278 MB
+docker.io/library/nginx                 latest             97662d24417b  7 weeks ago    196 MB
+docker.io/library/mysql                 5.7                5107333e08a8  15 months ago  520 MB
+docker.io/bytemark/smtp                 latest             cd5c77c3bcd8  6 years ago    135 MB
+```
+
+### Ejecución de contenedores
+
+Ahora vemos un ejemplo de cómo invocar el subcomando `run` en la terminal con varias opciones para ejecutar
+un servidor `httpd` Apache básico, que muestra la página de inicio en la dirección `http://localhost:8080` de nuestra
+máquina anfitriona.
+
+```bash
+$ podman run -dt -p 8080:80/tcp docker.io/library/httpd
+```
+
+- La opción `-d` evita que se vuelque la información de *log* sobre el progreso de la creación del contenedor en la terminal
+y simplemente muestra el ID del contenedor creado al acabar de ejecutar el comando.
+- La opción `-t` añade una pseudo terminal al contenedor que permitirá ejecutar comandos arbitrarios en una *shell*
+interactiva conectándonos al interior del contenedor (ver más abajo).
+- La opción `-p <puerto-host>:<puerto-cont>/<protocolo>` indica una redirección de un puerto interno del contenedor (en este caso
+el `80/tcp`) a un puerto externo de la máquina anfitriona.
+
+Por tanto, si ahora abrimos un navegador y cargamos la dirección `http://localhost:8080` la petición será redirigida al puerto
+TCP 80 del contenedor y el servidor web devolverá la página de inicio. Alternativamente puedes usar `curl` o `wget` en la
+terminal para comprobar que funciona:
+
+```bash
+$ curl http://localhost:8080
+```
+
+### Listado de contenedores
+
+El comando `podman ps` muestra una lista de todos los contenedores *en ejecución* en el momento actual.
+
+```bash
+$ podman ps
+```
+
+Si queremos obtener un listado de todos los contenedores creados, con independencia del estado en que estén, podemos usar
+la opción `-a`:
+
+```bash
+$ podman ps -a
+```
+
+### Inspeccionar un contenedor en ejecución
+
+Para recuperar información sobre los metadatos y detalles de configuración de un
+contenedor en ejecución se puede usar `podman inspect`.
+
+```bash
+$ podman inspect <id-contenedor>
+```
+
+::: {.callout-tip}
+Muchos subcomandos de Podman admiten la opción `-l` o `--latest` para referirse al
+contenedor ejecutado más recientemente.
+
+Por ejemplo: `podman inspect -l` mostrará metadatos e información descriptiva del
+último contenedor ejecutado.
+:::
+
+### Consulta de los *logs* de un contenedor
+
+Para imprimir por pantalla el contenido del archivo *log* con el registro de ejecución
+de un contenedor usamos el subcomando `podman logs`. Es importante recordar que, por
+defecto, este comando imprime *toda la información* del archivo de log de un contenedor.
+Por ello, si vamos a inspeccionar estos datos de forma interactiva es recomendable redirigir
+la salida de este subcomando a un paginador como `less`.
+
+Otra alternativa muy útil es usar la opción `--tail <N-lines>` para imprimir tan sólo
+las $N$ últimas líneas del fichero de log. Por ejemplo:
+
+```bash
+$ podman logs --tail 10 -l
+```
+
+Imprime las 10 últimas líneas del fichero de *log* de ejecución del último contenedor
+ejecutado. Otras opción interesante son `--follow=true` y `--since`.
+
+```bash
+$ podman logs --follow=true --since 10m ctrID
+```
+
+Este comando muestra las líneas de *log* de actividad del contenedor `ctrID` generadas
+durante los últimos 10 minutos y se queda en escucha para ir mostrando las nuevas
+líneas que se generen a partir de la ejecución de este comando.
+
+Es recomendable consultar `podman logs --help` o bien la página del manual
+de este subcomando para descubrir otras opciones interesantes al invocarlo.
+
+### Identificador de proceso de un contenedor
+
+El subcomando `podman top` permite inspeccionar los pid de los procesos en ejecución
+dentro del contendor. Por ejemplo, después de ejecutar el contenedor 
+`docker.io/library/httpd`.
+
+```bash
+$ podman top -l
+USER        PID         PPID        %CPU        ELAPSED       TTY         TIME        COMMAND
+root        1           0           0.000       6.531561782s  pts/0       0s          httpd -DFOREGROUND 
+www-data    3           1           0.000       6.531619962s  pts/0       0s          httpd -DFOREGROUND 
+www-data    4           1           0.000       6.531657752s  pts/0       0s          httpd -DFOREGROUND 
+www-data    6           1           0.000       6.531693141s  pts/0       0s          httpd -DFOREGROUND
+```
+
+### Detener de un contenedor
+
+El subcomando `podman stop` es el opuesto de `podman run`, ya que detiene un contenedor.
+Por ejemplo, para parar la ejecución del último contenedor ejecutado:
+
+```bash
+$ podman stop -l
+```
+
+Si no se han producido errores, partir de ese momento el subcomando `podman ps` ya no
+debería listar el contenedor detenido. Si necesitamos consultar la lista de todos los
+contenedores que han sido creados alguna vez, incluyendo los que están actualmente
+detenidos, podemos ejecutar:
+
+```bash
+$ podman ps -a
+```
+
+### Eliminación de contenedores
+
+Cuando paramos el contenedor sus archivos y almacenamiento asociados en disco todavía
+permanecen en la máquina, de modo que se pueda reanudar rápidamente su ejecución más
+adelante.
+
+Para eliminar por completo todos los archivos y almacenamiento en disco asociados a un
+contenedor ejecutamos el comando:
+
+```bash
+$ podman rm <ctrID>
+```
+
+::: {.callout-caution}
+Cuidado porque la operación de *borrado* de los archivos y almacenamiento asociados a un
+contenedor **no es reversible**.
+:::
+
+## Ejecución permanente de contenedores
+
+Es importante resaltar que los contenedores generados con Podman se crean, por defecto,
+en el espacio de usuario sin privilegios de *root*. Una consecuencia observable de esto
+es que cuando cerramos el proceso de terminal dentro del cual hemos ejecutado los
+comando de Podman, pasado un cierto tiempo, los contenedores **se detienen**.
+
+Si pretendemos ejecutar varios contenedores de forma permanente, por ejemplo, para
+levantar varios servicios a los que accedan los alumnos que realizan prácticas en una
+asignatura, debemos garantizar que las terminales desde las que hemos lanzado los
+contenedores se mantienen activas.
+
+Una forma de solventar esta limitación es emplear `tmux`, `screen`, `byobu` o un
+programa similar multiplexor de terminal, que permita desconectarse y reconectarse
+a la sesión de terminal manteniéndola activa, aun cuando nuestro usuario se
+desconecte de la máquina (por ejemplo, si accedemos remotamente mediante SSH).
+
+## Referencias
+
+- Documentación de Podman: <https://podman.io/docs>.
+- Podman Compose en GitHub: <https://github.com/containers/podman-compose>.
