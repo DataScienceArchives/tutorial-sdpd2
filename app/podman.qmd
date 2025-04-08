@@ -270,6 +270,16 @@ programa similar multiplexor de terminal, que permita desconectarse y reconectar
 a la sesión de terminal manteniéndola activa, aun cuando nuestro usuario se
 desconecte de la máquina (por ejemplo, si accedemos remotamente mediante SSH).
 
+## Creación de entornos con varios contenedores
+
+Para utilizar un fichero `docker-compose.yml` en el que podamos incluir la configuración
+de uno o varios contenedores y ejecutar todos simultáneamente en un entorno común, podemos
+ejecutar:
+
+```
+$ podman-compose -f docker-compose.yml up -d
+```
+
 ## Referencias
 
 - Documentación de Podman: <https://podman.io/docs>.
