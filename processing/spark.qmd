@@ -2,3 +2,26 @@
 
 Tutorial sobre instalación y configuración de Apache Spark, tecnología de referencia
 para procesamiento distribuido de datos.
+
+## Introducción
+
+
+### Versiones principales
+
+
+### Dependencias software
+
+
+## Imágenes Docker
+
+**Imagen**: `docker.io/bitnami/spark`
+
+Existe otra imagen del proyecto Jupyter, que incluye un entorno para ejecución de notebooks
+de Python, pero está muy desactualizada.
+
+<https://medium.com/@leodrl9/easy-way-setting-up-apache-spark-master-workers-and-jupyterlab-with-docker-compose-ee267d431b5d>
+<https://medium.com/datalex/running-pyspark-on-jupyter-notebook-with-docker-on-mac-a-step-by-step-guide-0b2e3bad1930>
+
+## Entorno Docker Compose
+
+Ficheros de configuración y ejemplos de ejecución.
