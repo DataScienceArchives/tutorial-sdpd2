@@ -53,22 +53,219 @@ proyecto de programación, como vemos a continuación.
 
 ### Dependencias software
 
-Por increíble que parezca a tenor de la velocidad a la que Apache Spark evoluciona y la rapidez con la que
-se generan nuevas versiones, el proyecto es un componente software extremadamente complejo y sensible a
-un gran número de dependencias software muy concretas que debemos satisfacer *de forma precisa* si
-aspiramos a que nuestras aplicaciones funcionen.
+Aunque Apache Spark evoluciona con gran rapidez y genera nuevas versiones con bastante frecuencia (ciclos de
+seis meses, en muchos casos), el proyecto es un componente software extremadamente complejo y sensible a
+un gran número de dependencias muy concretas que se deben satisfacer *de forma precisa* si
+aspiramos a que nuestras aplicaciones funcionen correctamente.
+
+![Diagrama que muestra la arquitectura funcional de una aplicación Spark en modo *driver*. Fuente: [@Damji2020].](figs/Spark-architecture.png){#fig-spark-arch width=80%}
+
+Como podemos observar en la @fig-spark-arch, una aplicación de Spark que funciona en modo interactivo en nuestro
+portátil, conectada a un nodo máster que da acceso a un *cluster* de tres *workers* de Spark, debe satisfacer
+múltiples depedencias software para poder funcionar correctamente.
+
+- **Python**: si nuestro programa Spark está escrito en Python es necesario que el número de versión del
+intérprete (*major* y *minor*) sea idéntico tanto en nuestro equipo local (*driver*) como en el nodo *master*
+y todos los nodos *worker* de Spark.
+
+    + También es importante cerciorarse de que la versión de Spark que utilicemos sea compatible con la versión
+    de Python instalada. Cada versión de Spark suele ser compatible con varias versiones de Python a partir de un
+    determinado número (p.ej. >=3.11), pero no hacia atrás.
+
+    + Del mismo modo, si estamos utilizando imágenes de contenedores para desplegar nuestra instalación de Spark,
+    es importante comprobar qué versión de Python está instalada en dicha imagen, ya que determina la versión que
+    debe utilizarse en todos los nodos participantes.
+
+- **Java Virtual Machine** (JVM): aunque nuestro programa esté escrito en Python, Spark lo traduce en tiempo real
+a código Scala, que debe ser ejecutado sobre una máquina virtual Java (JVM). Resulta curioso comprobar que, debido a
+este requisito funcional, también es imprescindible que la JVM esté previamente instalada en todos los nodos de la
+aplicación (*driver*, *master* y *workers*) y que la versión de la JVM coincida en todos ellos.
+
+    + En  consecuencia, debemos verificar que versión de JVM está instalada en la imagen Docker que vayamos a emplear
+    para el despliegue, y que versión de JVM se ha utilizado para compilar las librerías de Spark que vamos a usar. En
+    algunos casos, se publican varias versiones de la misma imagen Docker de Spark compiladas contra diferentes versiones
+    de JVM para garantizar la compatibilidad con diferentes entornos de producción.
+
+- **Scala**: en la asignatura vamos a utilizar, primordialmente, Python como lenguaje de programación. Sin embargo, para
+ejecutar cualquier ejemplo escrito en Scala es obligatorio verificar:
+
+    + Que la misma versión de Scala esté instalada en todos los nodos participantes (*driver*, *master* y *workers*).
+    + Que dicha versión de Scala sea compatible con la JVM instalada en cada sistema.
+    + Que la versión de Spark utilizada haya sido compilada con la misma versión de Scala instalada en cada sistema.
+
+- **Librerías Spark adicionales**: si nuestro programa necesita alguna librería adicional de Spark para
+funcionar es necesario que indiquemos estas dependencias al ejecutar nuestro programa para que se descarguen en los
+nodos *worker* del *cluster* Spark.
+
+Todos estos requisitos también deben cumplirse en caso de que nuestra aplicación se envíe al *cluster* para ejecutarse
+de forma desatendida (*Spark cluster mode*).
 
 
 ## Imágenes Docker
 
-**Imagen**: `docker.io/bitnami/spark`
+### Bitnami Spark
 
-Existe otra imagen del proyecto Jupyter, que incluye un entorno para ejecución de notebooks
-de Python, pero está muy desactualizada.
+::: {.callout-note}
+## Documentación
+*Imagen* `docker.io/bitnami/spark`: <https://hub.docker.com/r/bitnami/spark>.
+:::
 
-<https://medium.com/@leodrl9/easy-way-setting-up-apache-spark-master-workers-and-jupyterlab-with-docker-compose-ee267d431b5d>
-<https://medium.com/datalex/running-pyspark-on-jupyter-notebook-with-docker-on-mac-a-step-by-step-guide-0b2e3bad1930>
+Para la ejecución de tareas de las prácticas con Apache Spark vamos a emplear como imagen Docker de referencia
+la generada por Bitnami, una organización que forma parte de VMware Tanzu. Ofrece imágenes bastante populares y
+que se mantienen muy actualizadas, lo que es positivo en proyectos como Spark con un elevado ritmo de publicación de nuevas
+versiones. Las imágenes de Bitnami están basadas en [minideb](https://github.com/bitnami/minideb), una versión
+minimalista de Debian GNU/Linux especialmente concebida para contenedores.
+
+En particular, usaremos la **versión 3.5.1** de esta imagen, que incluye dicha versión de Apache Spark junto
+con Python 3.11 y la JVM 17.
+
+La imagen permite alterar los valores por defecto de muchas variables de configuración para Spark. La mejor manera
+de hacer esto es usando un archivo Docker Compose para definir nuestros contenedores.
+
+El siguiente extracto de código muestra un ejemplo de cómo incluir estas variables de configuración en un archivo
+`docker-compose.yaml`.
+
+```yaml
+spark:
+  ...
+  environment:
+    - SPARK_MODE=master
+    - SPARK_MASTER_URL=spark://spark-master:7077
+  ...
+```
+
+### Jupyter Spark
+
+Existe otra imagen del proyecto Jupyter (1), que incluye un entorno para ejecución de notebooks
+de Python, pero está muy desactualizada. No aconsejamos su utilización.
+
+(1) <https://medium.com/@leodrl9/easy-way-setting-up-apache-spark-master-workers-and-jupyterlab-with-docker-compose-ee267d431b5d>.
+
+Como alternativa (2), se puede generar un contenedor personalizado que incluya Python y los paquetes de Jupyter Lab, junto
+con una versión actualizada de Spark.
+
+(2) <https://medium.com/datalex/running-pyspark-on-jupyter-notebook-with-docker-on-mac-a-step-by-step-guide-0b2e3bad1930>.
 
 ## Entorno Docker Compose
 
-Ficheros de configuración y ejemplos de ejecución.
+Por último, recogemos todos los pasos a seguir para configurar un entorno completo de ejecución de Spark en modo
+*cluster*, pero utilizando Docker Compose para generar todos los contenedores en nuestra máquina local.
+
+### Instalación y/o activación de la JVM
+
+Puesto que la imagen `bitnami/spark` usa la JVM 17, debemos usar la misma versión de máquina virtual de Java en nuestro
+sistema anfitrión. La mejor opción es instalar `Java OpenJDK 17` mediante los paquetes APT estándar de los repositorios
+oficiales de Ubuntu.
+
+- [Instalación OpenJDK 17 en Ubuntu 24.04](https://www.server-world.info/en/note?os=Ubuntu_24.04&p=java&f=3).
+
+::: {.callout-tip}
+## Activación del entorno Java
+Si tenemos varias JVM instaladas simultáneamente en nuestro sistema, entonces debemos seleccionar la que queremos usar
+con nuestros programas. Hay dos opciones para esto, mostradas en el tutorial enlazado arriba:
+
+1. Configurar los valores de las variables de entorno `JAVA_HOME` y `PATH` (si ejecutamos desde la terminal) o
+sólo de la primera variable (dentro de nuestros programas Python) para que se selecciones la versión correcta de la JVM.
+
+2. Ejecutar el comando `sudo update-java-alternatives` (requiere privilegios de *root*) para seleccionar la JVM a
+emplear. Esta configuración será efectiva **en todo el sistema** (no solo en esa terminal), hasta que volvamos a modificar
+la configuración.
+:::
+
+### Creación de un nuevo proyecto `uv`
+
+Debemos crear en nuestra máquina anfitriona un nuevo proyecto Python utilizando la versión del intérprete que
+coincide con la instalada en la imagen que usan los contenedores.
+
+```bash
+$ uv init pyspark-351 --python 3.11
+$ cd pyspark-351
+```
+
+### Instalación de `pyspark` en el anfitrión
+
+Ahora instalamos la versión del paquete Python `pyspark` que coincide también con la instalada en la imagen Docker que
+estamos usando.
+
+```bash
+$ uv venv
+$ source .venv/bin/activate
+(pyspark-351)$ uv pip install pyspark==3.5.1
+```
+
+### Ejecución de servicios del entorno Docker Compose
+
+Por último, creamos un archivo `docker-compose.yaml` con toda la información de configuración de nuestro entorno, que
+consta de un nodo Spark actuando como *master* o coordinador y otro nodo como *worker*.
+
+```yaml
+{{< include examples/docker-compose.yml >}}
+```
+
+Y también creamos otro fichero `Dockerfile` en el que podemos configurar a nuestro gusto la imagen de
+Spark que usamos en los contenedores. Por ejemplo, aquí se muestra cómo copiar dentro del contenedor un
+fichero `log4j2.properties` para configurar el nivel de detalle de los *logs* que imprime Spark por la terminal.
+
+```yaml
+{{< include examples/Dockerfile >}}
+```
+
+El contenido del fichero `log4j2.properties` es el siguiente.
+
+```properties
+{{< include examples/log4j2.properties >}}
+```
+
+
+Ejecutamos los contenedores desde una terminal con Podman.
+
+```
+$ podman-compose up --build
+```
+
+Si no se producen errores, deberíamos tener dos contenedores ejecutándose como se muestra a continuación.
+
+```bash
+(pyspark-351) jfelipe@helium:~/Docencia/URJC/Grado/SDPD2/lab/podman/spark/pyspark-351$ podman ps
+CONTAINER ID  IMAGE                                      COMMAND               CREATED         STATUS         PORTS                                           NAMES
+52d2b63c7f24  localhost/pyspark-351_spark:latest         /opt/bitnami/scri...  17 seconds ago  Up 15 seconds  0.0.0.0:7077->7077/tcp, 0.0.0.0:8080->8080/tcp  pyspark-351_spark_1
+6b51de37c28d  localhost/pyspark-351_spark-worker:latest  /opt/bitnami/scri...  16 seconds ago  Up 14 seconds                                                  pyspark-351_spark-worker_1
+```
+
+### Ejecución del ejemplo de prueba
+
+Al instalar el paquete `pyspark` en nuestro entorno virtual de Python para este proyecto se 
+han incluido múltiples ejecutables en el directorio `.venv/bin/`, con programas que permiten
+interactuar con instalaciones de Spark desde Python.
+
+El ejecutable `.venv/bin/spark-submit` permite enviar a un cluster de Spark un programa Python
+para su ejecución.
+
+```bash
+(pyspark-351) jfelipe@helium:~/Docencia/URJC/Grado/SDPD2/lab/podman/spark/pyspark-351$ .venv/bin/spark-submit --help
+Usage: spark-submit [options] <app jar | python file | R file> [app arguments]
+Usage: spark-submit --kill [submission ID] --master [spark://...]
+Usage: spark-submit --status [submission ID] --master [spark://...]
+Usage: spark-submit run-example [options] example-class [example args]
+
+Options:
+  --master MASTER_URL         spark://host:port, mesos://host:port, yarn,
+                              k8s://https://host:port, or local (Default: local[*]).
+...
+```
+
+En nuestro caso el programa que ejecutamos es [`hello-spark.py`](https://gitlab.eif.urjc.es/data-science-pub/dspub-tutorials/tutorial-sdpd2/-/blob/main/processing/examples/hello-spark.py?ref_type=heads).
+
+```python
+{{< include examples/hello-spark.py >}}
+```
+
+Este programa configura internamente un `host` y un `puerto` específicos en los que está
+esperando un *manager* de Spark que acepta tareas. Para este ejemplo, el servicio Docker Compose está en
+`localhost` y escucha en el puerto estándar `7077`.
+
+```bash
+(pyspark-351) jfelipe@helium:~/Docencia/URJC/Grado/SDPD2/lab/podman/spark/pyspark-351$ .venv/bin/spark-submit hello-spark.py
+...
+Count of numbers from 1 to 1000 is: 999
+```
