@@ -5,11 +5,58 @@ para procesamiento distribuido de datos.
 
 ## Introducción
 
+Apache Spark (<https://spark.apache.org/>) es un motor unificado de procesamiento de
+datos compatible con múltiples lenguajes de programación (Scala, Java, Python, R) que
+puede ejecutarse en una sola máquina o en un *cluster* de computación distribuida.
+Además, Spark es compatible tanto con el paradigma de procesamiento de datos *batch* como
+con el de procesamiento de flujos de datos (*streaming*), utilizando el mismo motor
+de procesado en ambos casos.
+
+Entre sus principales casos de aplicación cabe destacar:
+
+- Creación de grafos de procesamiento de datos escalables, con una interfaz de programación
+que simplifica en gran medida la ejecución de tareas en un entorno distribuido.
+
+- Posibilidad de ejecutar consultas ANSI SQL nativas sobre conjuntos de datos en múltiples
+formatos sin necesidad de utilizar bases de datos o productos de *datawarehouse*, directamente
+sobre la información en crudo.
+
+- Capadidad para escalar el cómputo distribuido con datos a nivel de petabytes, sin que
+sea preciso recurrir a técnicas de filtrado de datos o submuestreo.
+
+- Integración de un extenso catalogo de algoritmos de *aprendizaje máquina* adaptados para su
+ejecución desde en un portátil hasta en entornos distribuidos y tolerantes a fallos con miles
+de nodos.
+
+Gracias a su extrema versatilidad y compatiblidad con una larga lista de proyectos y tecnologías
+habituales en ciencia de datos, Apache Spark se ha convertido en uno de los motores de referencia
+para el procesamiento de datos en la actualidad, tomando el relevo de Hadoop como solución de
+referencia en la mayoría de stacks tecnológicos del mercado y arquitecturas en la nube.
+
 
 ### Versiones principales
 
+A finales de abril de 2025 la versión estable de Spark es la 3.5.5, aunque ya existe una *preview*
+de la próxima *major version* del proyecto, Spark 4.0.0, que se prevé que esté disponible en junio
+de 2025.
+
+A pesar de que la nueva versión principal vendrá cargada de muchas novedades, muchos condicionantes,
+especialmente el de las dependencias software que explicamos en la siguiente sección, obligan a que
+seamos prudentes y recomendemos utilizar versiones de Spark un poco anteriores y más probadas.
+
+En particular, **para la asignatura se emplea `Spark 3.5.1`**, puesto que esta versión funciona bien tanto
+con Python 3.11 como con Java SDK 17 y Scala 2.12. Por ejemplo, `Spark 3.5.5` está preparado para utilizar
+Python 3.12 (que viene instalado por defecto en la mayoría de imágenes Docker disponibles para esa
+versión), lo que obligaría a utilizar esa misma versión de Python en los restantes componentes de nuestro
+proyecto de programación, como vemos a continuación.
+
 
 ### Dependencias software
+
+Por increíble que parezca a tenor de la velocidad a la que Apache Spark evoluciona y la rapidez con la que
+se generan nuevas versiones, el proyecto es un componente software extremadamente complejo y sensible a
+un gran número de dependencias software muy concretas que debemos satisfacer *de forma precisa* si
+aspiramos a que nuestras aplicaciones funcionen.
 
 
 ## Imágenes Docker
