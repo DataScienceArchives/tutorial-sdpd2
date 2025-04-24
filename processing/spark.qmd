@@ -216,6 +216,12 @@ El contenido del fichero `log4j2.properties` es el siguiente.
 {{< include examples/log4j2.properties >}}
 ```
 
+Además, debemos configurar una variable de entorno `HOST_IP` con la dirección IP de la máquina anfitriona
+en la que se ejecutan los contenedores.
+
+```bash
+$ export HOST_IP=10.20.30.40
+```
 
 Ejecutamos los contenedores desde una terminal con Podman.
 
