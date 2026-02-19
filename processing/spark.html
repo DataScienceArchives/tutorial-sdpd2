@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>7&nbsp; Apache Spark – Tutorial - Sistemas Distribuidos de Procesamiento de Datos 2 - GCID - EIF</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../processing/flink.html" rel="next">
+<link href="../processing/processing.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-04e1f1103201cc0a83f720091ef4aae4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sin resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../processing/processing.html">Procesamiento de Datos</a></li><li class="breadcrumb-item"><a href="../processing/spark.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Apache Spark</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Tutorial - Sistemas Distribuidos de Procesamiento de Datos 2 - GCID - EIF</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Buscar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prefacio</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../dags/dags.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DAGs</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../dags/luigi.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Luigi</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../dags/airflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Apache Airflow</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../queues/queues.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Colas de mensajes</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../queues/zmq.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">ZMQ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../queues/kafka.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Apache Kafka</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../queues/serial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Serialización de datos</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../processing/processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Procesamiento de Datos</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../processing/spark.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Apache Spark</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../processing/flink.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Apache Flink</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../processing/dask.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Dask</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../sia/scalable-ia.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">IA escalable</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sia/torch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Torch</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sia/tensorflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">TensorFlow</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sia/llms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">LLMs</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sia/h2o.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">H2O</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referencias</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Apéndices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../app/uv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Astral uv</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../app/podman.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Podman</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../app/vscode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">VS Code</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../app/quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Quarto</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#introducción" id="toc-introducción" class="nav-link active" data-scroll-target="#introducción"><span class="header-section-number">7.1</span> Introducción</a>
+  <ul class="collapse">
+  <li><a href="#versiones-principales" id="toc-versiones-principales" class="nav-link" data-scroll-target="#versiones-principales"><span class="header-section-number">7.1.1</span> Versiones principales</a></li>
+  <li><a href="#dependencias-software" id="toc-dependencias-software" class="nav-link" data-scroll-target="#dependencias-software"><span class="header-section-number">7.1.2</span> Dependencias software</a></li>
+  </ul></li>
+  <li><a href="#imágenes-docker" id="toc-imágenes-docker" class="nav-link" data-scroll-target="#imágenes-docker"><span class="header-section-number">7.2</span> Imágenes Docker</a>
+  <ul class="collapse">
+  <li><a href="#bitnami-spark" id="toc-bitnami-spark" class="nav-link" data-scroll-target="#bitnami-spark"><span class="header-section-number">7.2.1</span> Bitnami Spark</a></li>
+  <li><a href="#jupyter-spark" id="toc-jupyter-spark" class="nav-link" data-scroll-target="#jupyter-spark"><span class="header-section-number">7.2.2</span> Jupyter Spark</a></li>
+  </ul></li>
+  <li><a href="#entorno-docker-compose" id="toc-entorno-docker-compose" class="nav-link" data-scroll-target="#entorno-docker-compose"><span class="header-section-number">7.3</span> Entorno Docker Compose</a>
+  <ul class="collapse">
+  <li><a href="#instalación-yo-activación-de-la-jvm" id="toc-instalación-yo-activación-de-la-jvm" class="nav-link" data-scroll-target="#instalación-yo-activación-de-la-jvm"><span class="header-section-number">7.3.1</span> Instalación y/o activación de la JVM</a></li>
+  <li><a href="#creación-de-un-nuevo-proyecto-uv" id="toc-creación-de-un-nuevo-proyecto-uv" class="nav-link" data-scroll-target="#creación-de-un-nuevo-proyecto-uv"><span class="header-section-number">7.3.2</span> Creación de un nuevo proyecto <code>uv</code></a></li>
+  <li><a href="#instalación-de-pyspark-en-el-anfitrión" id="toc-instalación-de-pyspark-en-el-anfitrión" class="nav-link" data-scroll-target="#instalación-de-pyspark-en-el-anfitrión"><span class="header-section-number">7.3.3</span> Instalación de <code>pyspark</code> en el anfitrión</a></li>
+  <li><a href="#ejecución-de-servicios-del-entorno-docker-compose" id="toc-ejecución-de-servicios-del-entorno-docker-compose" class="nav-link" data-scroll-target="#ejecución-de-servicios-del-entorno-docker-compose"><span class="header-section-number">7.3.4</span> Ejecución de servicios del entorno Docker Compose</a></li>
+  <li><a href="#ejecución-del-ejemplo-de-prueba" id="toc-ejecución-del-ejemplo-de-prueba" class="nav-link" data-scroll-target="#ejecución-del-ejemplo-de-prueba"><span class="header-section-number">7.3.5</span> Ejecución del ejemplo de prueba</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../processing/processing.html">Procesamiento de Datos</a></li><li class="breadcrumb-item"><a href="../processing/spark.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Apache Spark</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Apache Spark</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Tutorial sobre instalación y configuración de Apache Spark, tecnología de referencia para procesamiento distribuido de datos.</p>
+<section id="introducción" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="introducción"><span class="header-section-number">7.1</span> Introducción</h2>
+<p>Apache Spark (<a href="https://spark.apache.org/" class="uri">https://spark.apache.org/</a>) es un motor unificado de procesamiento de datos compatible con múltiples lenguajes de programación (Scala, Java, Python, R) que puede ejecutarse en una sola máquina o en un <em>cluster</em> de computación distribuida. Además, Spark es compatible tanto con el paradigma de procesamiento de datos <em>batch</em> como con el de procesamiento de flujos de datos (<em>streaming</em>), utilizando el mismo motor de procesado en ambos casos.</p>
+<p>Entre sus principales casos de aplicación cabe destacar:</p>
+<ul>
+<li><p>Creación de grafos de procesamiento de datos escalables, con una interfaz de programación que simplifica en gran medida la ejecución de tareas en un entorno distribuido.</p></li>
+<li><p>Posibilidad de ejecutar consultas ANSI SQL nativas sobre conjuntos de datos en múltiples formatos sin necesidad de utilizar bases de datos o productos de <em>datawarehouse</em>, directamente sobre la información en crudo.</p></li>
+<li><p>Capadidad para escalar el cómputo distribuido con datos a nivel de petabytes, sin que sea preciso recurrir a técnicas de filtrado de datos o submuestreo.</p></li>
+<li><p>Integración de un extenso catalogo de algoritmos de <em>aprendizaje máquina</em> adaptados para su ejecución desde en un portátil hasta en entornos distribuidos y tolerantes a fallos con miles de nodos.</p></li>
+</ul>
+<p>Gracias a su extrema versatilidad y compatiblidad con una larga lista de proyectos y tecnologías habituales en ciencia de datos, Apache Spark se ha convertido en uno de los motores de referencia para el procesamiento de datos en la actualidad, tomando el relevo de Hadoop como solución de referencia en la mayoría de stacks tecnológicos del mercado y arquitecturas en la nube.</p>
+<section id="versiones-principales" class="level3" data-number="7.1.1">
+<h3 data-number="7.1.1" class="anchored" data-anchor-id="versiones-principales"><span class="header-section-number">7.1.1</span> Versiones principales</h3>
+<p>A finales de abril de 2025 la versión estable de Spark es la 3.5.5, aunque ya existe una <em>preview</em> de la próxima <em>major version</em> del proyecto, Spark 4.0.0, que se prevé que esté disponible en junio de 2025.</p>
+<p>A pesar de que la nueva versión principal vendrá cargada de muchas novedades, muchos condicionantes, especialmente el de las dependencias software que explicamos en la siguiente sección, obligan a que seamos prudentes y recomendemos utilizar versiones de Spark un poco anteriores y más probadas.</p>
+<p>En particular, <strong>para la asignatura se emplea <code>Spark 3.5.1</code></strong>, puesto que esta versión funciona bien tanto con Python 3.11 como con Java SDK 17 y Scala 2.12. Por ejemplo, <code>Spark 3.5.5</code> está preparado para utilizar Python 3.12 (que viene instalado por defecto en la mayoría de imágenes Docker disponibles para esa versión), lo que obligaría a utilizar esa misma versión de Python en los restantes componentes de nuestro proyecto de programación, como vemos a continuación.</p>
+</section>
+<section id="dependencias-software" class="level3" data-number="7.1.2">
+<h3 data-number="7.1.2" class="anchored" data-anchor-id="dependencias-software"><span class="header-section-number">7.1.2</span> Dependencias software</h3>
+<p>Aunque Apache Spark evoluciona con gran rapidez y genera nuevas versiones con bastante frecuencia (ciclos de seis meses, en muchos casos), el proyecto es un componente software extremadamente complejo y sensible a un gran número de dependencias muy concretas que se deben satisfacer <em>de forma precisa</em> si aspiramos a que nuestras aplicaciones funcionen correctamente.</p>
+<div id="fig-spark-arch" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-spark-arch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figs/Spark-architecture.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-spark-arch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;7.1: Diagrama que muestra la arquitectura funcional de una aplicación Spark en modo <em>driver</em>. Fuente: <span class="citation" data-cites="Damji2020"><a href="../references.html#ref-Damji2020" role="doc-biblioref">[1]</a></span>.
+</figcaption>
+</figure>
+</div>
+<p>Como podemos observar en la <a href="#fig-spark-arch" class="quarto-xref">Figura&nbsp;<span>7.1</span></a>, una aplicación de Spark que funciona en modo interactivo en nuestro portátil, conectada a un nodo máster que da acceso a un <em>cluster</em> de tres <em>workers</em> de Spark, debe satisfacer múltiples depedencias software para poder funcionar correctamente.</p>
+<ul>
+<li><p><strong>Python</strong>: si nuestro programa Spark está escrito en Python es necesario que el número de versión del intérprete (<em>major</em> y <em>minor</em>) sea idéntico tanto en nuestro equipo local (<em>driver</em>) como en el nodo <em>master</em> y todos los nodos <em>worker</em> de Spark.</p>
+<ul>
+<li><p>También es importante cerciorarse de que la versión de Spark que utilicemos sea compatible con la versión de Python instalada. Cada versión de Spark suele ser compatible con varias versiones de Python a partir de un determinado número (p.ej. &gt;=3.11), pero no hacia atrás.</p></li>
+<li><p>Del mismo modo, si estamos utilizando imágenes de contenedores para desplegar nuestra instalación de Spark, es importante comprobar qué versión de Python está instalada en dicha imagen, ya que determina la versión que debe utilizarse en todos los nodos participantes.</p></li>
+</ul></li>
+<li><p><strong>Java Virtual Machine</strong> (JVM): aunque nuestro programa esté escrito en Python, Spark lo traduce en tiempo real a código Scala, que debe ser ejecutado sobre una máquina virtual Java (JVM). Resulta curioso comprobar que, debido a este requisito funcional, también es imprescindible que la JVM esté previamente instalada en todos los nodos de la aplicación (<em>driver</em>, <em>master</em> y <em>workers</em>) y que la versión de la JVM coincida en todos ellos.</p>
+<ul>
+<li>En consecuencia, debemos verificar que versión de JVM está instalada en la imagen Docker que vayamos a emplear para el despliegue, y que versión de JVM se ha utilizado para compilar las librerías de Spark que vamos a usar. En algunos casos, se publican varias versiones de la misma imagen Docker de Spark compiladas contra diferentes versiones de JVM para garantizar la compatibilidad con diferentes entornos de producción.</li>
+</ul></li>
+<li><p><strong>Scala</strong>: en la asignatura vamos a utilizar, primordialmente, Python como lenguaje de programación. Sin embargo, para ejecutar cualquier ejemplo escrito en Scala es obligatorio verificar:</p>
+<ul>
+<li>Que la misma versión de Scala esté instalada en todos los nodos participantes (<em>driver</em>, <em>master</em> y <em>workers</em>).</li>
+<li>Que dicha versión de Scala sea compatible con la JVM instalada en cada sistema.</li>
+<li>Que la versión de Spark utilizada haya sido compilada con la misma versión de Scala instalada en cada sistema.</li>
+</ul></li>
+<li><p><strong>Librerías Spark adicionales</strong>: si nuestro programa necesita alguna librería adicional de Spark para funcionar es necesario que indiquemos estas dependencias al ejecutar nuestro programa para que se descarguen en los nodos <em>worker</em> del <em>cluster</em> Spark.</p></li>
+</ul>
+<p>Todos estos requisitos también deben cumplirse en caso de que nuestra aplicación se envíe al <em>cluster</em> para ejecutarse de forma desatendida (<em>Spark cluster mode</em>).</p>
+</section>
+</section>
+<section id="imágenes-docker" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="imágenes-docker"><span class="header-section-number">7.2</span> Imágenes Docker</h2>
+<section id="bitnami-spark" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="bitnami-spark"><span class="header-section-number">7.2.1</span> Bitnami Spark</h3>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Documentación
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>Imagen</em> <code>docker.io/bitnami/spark</code>: <a href="https://hub.docker.com/r/bitnami/spark" class="uri">https://hub.docker.com/r/bitnami/spark</a>.</p>
+</div>
+</div>
+<p>Para la ejecución de tareas de las prácticas con Apache Spark vamos a emplear como imagen Docker de referencia la generada por Bitnami, una organización que forma parte de VMware Tanzu. Ofrece imágenes bastante populares y que se mantienen muy actualizadas, lo que es positivo en proyectos como Spark con un elevado ritmo de publicación de nuevas versiones. Las imágenes de Bitnami están basadas en <a href="https://github.com/bitnami/minideb">minideb</a>, una versión minimalista de Debian GNU/Linux especialmente concebida para contenedores.</p>
+<p>En particular, usaremos la <strong>versión 3.5.1</strong> de esta imagen, que incluye dicha versión de Apache Spark junto con Python 3.11 y la JVM 17.</p>
+<p>La imagen permite alterar los valores por defecto de muchas variables de configuración para Spark. La mejor manera de hacer esto es usando un archivo Docker Compose para definir nuestros contenedores.</p>
+<p>El siguiente extracto de código muestra un ejemplo de cómo incluir estas variables de configuración en un archivo <code>docker-compose.yaml</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark</span><span class="kw">:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">  ...</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> SPARK_MODE=master</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> SPARK_MASTER_URL=spark://spark-master:7077</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">  ...</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="jupyter-spark" class="level3" data-number="7.2.2">
+<h3 data-number="7.2.2" class="anchored" data-anchor-id="jupyter-spark"><span class="header-section-number">7.2.2</span> Jupyter Spark</h3>
+<p>Existe otra imagen del proyecto Jupyter (1), que incluye un entorno para ejecución de notebooks de Python, pero está muy desactualizada. No aconsejamos su utilización.</p>
+<ol type="1">
+<li><a href="https://medium.com/@leodrl9/easy-way-setting-up-apache-spark-master-workers-and-jupyterlab-with-docker-compose-ee267d431b5d" class="uri">https://medium.com/@leodrl9/easy-way-setting-up-apache-spark-master-workers-and-jupyterlab-with-docker-compose-ee267d431b5d</a>.</li>
+</ol>
+<p>Como alternativa (2), se puede generar un contenedor personalizado que incluya Python y los paquetes de Jupyter Lab, junto con una versión actualizada de Spark.</p>
+<ol start="2" type="1">
+<li><a href="https://medium.com/datalex/running-pyspark-on-jupyter-notebook-with-docker-on-mac-a-step-by-step-guide-0b2e3bad1930" class="uri">https://medium.com/datalex/running-pyspark-on-jupyter-notebook-with-docker-on-mac-a-step-by-step-guide-0b2e3bad1930</a>.</li>
+</ol>
+</section>
+</section>
+<section id="entorno-docker-compose" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="entorno-docker-compose"><span class="header-section-number">7.3</span> Entorno Docker Compose</h2>
+<p>Por último, recogemos todos los pasos a seguir para configurar un entorno completo de ejecución de Spark en modo <em>cluster</em>, pero utilizando Docker Compose para generar todos los contenedores en nuestra máquina local.</p>
+<section id="instalación-yo-activación-de-la-jvm" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="instalación-yo-activación-de-la-jvm"><span class="header-section-number">7.3.1</span> Instalación y/o activación de la JVM</h3>
+<p>Puesto que la imagen <code>bitnami/spark</code> usa la JVM 17, debemos usar la misma versión de máquina virtual de Java en nuestro sistema anfitrión. La mejor opción es instalar <code>Java OpenJDK 17</code> mediante los paquetes APT estándar de los repositorios oficiales de Ubuntu.</p>
+<ul>
+<li><a href="https://www.server-world.info/en/note?os=Ubuntu_24.04&amp;p=java&amp;f=3">Instalación OpenJDK 17 en Ubuntu 24.04</a>.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Activación del entorno Java
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Si tenemos varias JVM instaladas simultáneamente en nuestro sistema, entonces debemos seleccionar la que queremos usar con nuestros programas. Hay dos opciones para esto, mostradas en el tutorial enlazado arriba:</p>
+<ol type="1">
+<li><p>Configurar los valores de las variables de entorno <code>JAVA_HOME</code> y <code>PATH</code> (si ejecutamos desde la terminal) o sólo de la primera variable (dentro de nuestros programas Python) para que se selecciones la versión correcta de la JVM.</p></li>
+<li><p>Ejecutar el comando <code>sudo update-java-alternatives</code> (requiere privilegios de <em>root</em>) para seleccionar la JVM a emplear. Esta configuración será efectiva <strong>en todo el sistema</strong> (no solo en esa terminal), hasta que volvamos a modificar la configuración.</p></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="creación-de-un-nuevo-proyecto-uv" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="creación-de-un-nuevo-proyecto-uv"><span class="header-section-number">7.3.2</span> Creación de un nuevo proyecto <code>uv</code></h3>
+<p>Debemos crear en nuestra máquina anfitriona un nuevo proyecto Python utilizando la versión del intérprete que coincide con la instalada en la imagen que usan los contenedores.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> uv init pyspark-351 <span class="at">--python</span> 3.11</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd pyspark-351</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="instalación-de-pyspark-en-el-anfitrión" class="level3" data-number="7.3.3">
+<h3 data-number="7.3.3" class="anchored" data-anchor-id="instalación-de-pyspark-en-el-anfitrión"><span class="header-section-number">7.3.3</span> Instalación de <code>pyspark</code> en el anfitrión</h3>
+<p>Ahora instalamos la versión del paquete Python <code>pyspark</code> que coincide también con la instalada en la imagen Docker que estamos usando.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> uv venv</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> source .venv/bin/activate</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">pyspark-351</span><span class="kw">)</span><span class="ex">$</span> uv pip install pyspark==3.5.1</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="ejecución-de-servicios-del-entorno-docker-compose" class="level3" data-number="7.3.4">
+<h3 data-number="7.3.4" class="anchored" data-anchor-id="ejecución-de-servicios-del-entorno-docker-compose"><span class="header-section-number">7.3.4</span> Ejecución de servicios del entorno Docker Compose</h3>
+<p>Por último, creamos un archivo <code>docker-compose.yaml</code> con toda la información de configuración de nuestro entorno, que consta de un nodo Spark actuando como <em>master</em> o coordinador y otro nodo como <em>worker</em>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">version</span><span class="kw">:</span><span class="at"> </span><span class="st">'3.7'</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">services</span><span class="kw">:</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">spark</span><span class="kw">:</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">    #image: bitnami/spark:3.5.1</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">build</span><span class="kw">:</span><span class="at"> .</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> SPARK_MODE=master</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> SPARK_RPC_AUTHENTICATION_ENABLED=no</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> SPARK_RPC_ENCRYPTION_ENABLED=no</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> SPARK_SSL_ENABLED=no</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> SPARK_USER=spark</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">'8080:8080'</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">'7077:7077'</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co">    # MUST BE OFF VPN FOR THIS TO WORK</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">extra_hosts</span><span class="kw">:</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">"host.docker.internal:${HOST_IP}"</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">spark-worker</span><span class="kw">:</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co">    #image: bitnami/spark:3.5.1</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">build</span><span class="kw">:</span><span class="at"> .</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> SPARK_MODE=worker</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> SPARK_MASTER_URL=spark://spark:7077</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> SPARK_WORKER_MEMORY=2G</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> SPARK_WORKER_CORES=2</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> SPARK_RPC_AUTHENTICATION_ENABLED=no</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> SPARK_RPC_ENCRYPTION_ENABLED=no</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> SPARK_SSL_ENABLED=no</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> SPARK_USER=spark</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">extra_hosts</span><span class="kw">:</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">"host.docker.internal:${HOST_IP}"</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Y también creamos otro fichero <code>Dockerfile</code> en el que podemos configurar a nuestro gusto la imagen de Spark que usamos en los contenedores. Por ejemplo, aquí se muestra cómo copiar dentro del contenedor un fichero <code>log4j2.properties</code> para configurar el nivel de detalle de los <em>logs</em> que imprime Spark por la terminal.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="at">FROM bitnami/spark:3.5.1</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: custom logging</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="at">COPY log4j2.properties /opt/bitnami/spark/conf/log4j2.properties</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Since the cluster will deserialize your app and run it, the cluster need similar depenecies.</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ie. if your app uses numpy</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#RUN pip install numpy</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>El contenido del fichero <code>log4j2.properties</code> es el siguiente.</p>
+<pre class="properties"><code>mstatus = error
+name = PropertiesConfig
+
+# Define appenders
+appender.console.type = Console
+appender.console.name = ConsoleAppender
+appender.console.target = SYSTEM_ERR
+appender.console.layout.type = PatternLayout
+appender.console.layout.pattern = %d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+
+# Set root logger level
+rootLogger.level = error
+rootLogger.appenderRef.stdout.ref = ConsoleAppender
+
+# Set PySpark logging level to INFO to see PySpark-specific logs
+logger.pyspark.name = org.apache.spark.api.python
+logger.pyspark.level = warn
+logger.pyspark.appenderRef.console.ref = ConsoleAppender
+
+# Set Spark SQL logging level to INFO for visibility into Spark SQL operations
+logger.sparksql.name = org.apache.spark.sql.execution
+logger.sparksql.level = warn
+logger.sparksql.appenderRef.console.ref = ConsoleAppender
+
+# Optionally, adjust the logging level for other Spark components as needed
+logger.sparkcontext.name = org.apache.spark.SparkContext
+logger.sparkcontext.level = warn
+logger.sparkcontext.appenderRef.console.ref = ConsoleAppender
+</code></pre>
+<p>Además, debemos configurar una variable de entorno <code>HOST_IP</code> con la dirección IP de la máquina anfitriona en la que se ejecutan los contenedores.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> export HOST_IP=10.20.30.40</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Ejecutamos los contenedores desde una terminal con Podman.</p>
+<pre><code>$ podman-compose up --build</code></pre>
+<p>Si no se producen errores, deberíamos tener dos contenedores ejecutándose como se muestra a continuación.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">pyspark-351</span><span class="kw">)</span> <span class="ex">jfelipe@helium:~/Docencia/URJC/Grado/SDPD2/lab/podman/spark/pyspark-351$</span> podman ps</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">CONTAINER</span> ID  IMAGE                                      COMMAND               CREATED         STATUS         PORTS                                           NAMES</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">52d2b63c7f24</span>  localhost/pyspark-351_spark:latest         /opt/bitnami/scri...  17 seconds ago  Up 15 seconds  0.0.0.0:7077-<span class="op">&gt;</span>7077/tcp, 0.0.0.0:8080-<span class="op">&gt;</span>8080/tcp  pyspark-351_spark_1</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">6b51de37c28d</span>  localhost/pyspark-351_spark-worker:latest  /opt/bitnami/scri...  16 seconds ago  Up 14 seconds                                                  pyspark-351_spark-worker_1</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="ejecución-del-ejemplo-de-prueba" class="level3" data-number="7.3.5">
+<h3 data-number="7.3.5" class="anchored" data-anchor-id="ejecución-del-ejemplo-de-prueba"><span class="header-section-number">7.3.5</span> Ejecución del ejemplo de prueba</h3>
+<p>Al instalar el paquete <code>pyspark</code> en nuestro entorno virtual de Python para este proyecto se han incluido múltiples ejecutables en el directorio <code>.venv/bin/</code>, con programas que permiten interactuar con instalaciones de Spark desde Python.</p>
+<p>El ejecutable <code>.venv/bin/spark-submit</code> permite enviar a un cluster de Spark un programa Python para su ejecución.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">pyspark-351</span><span class="kw">)</span> <span class="ex">jfelipe@helium:~/Docencia/URJC/Grado/SDPD2/lab/podman/spark/pyspark-351$</span> .venv/bin/spark-submit <span class="at">--help</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Usage:</span> spark-submit <span class="pp">[</span><span class="ss">options</span><span class="pp">]</span> <span class="op">&lt;</span>app jar <span class="kw">|</span> <span class="ex">python</span> file <span class="kw">|</span> <span class="ex">R</span> file<span class="op">&gt;</span> [app arguments]</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Usage:</span> spark-submit <span class="at">--kill</span> [submission ID] <span class="at">--master</span> <span class="pp">[</span><span class="ss">spark://...</span><span class="pp">]</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Usage:</span> spark-submit <span class="at">--status</span> [submission ID] <span class="at">--master</span> <span class="pp">[</span><span class="ss">spark://...</span><span class="pp">]</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Usage:</span> spark-submit run-example <span class="pp">[</span><span class="ss">options</span><span class="pp">]</span> example-class [example args]</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Options:</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">--master</span> MASTER_URL         spark://host:port, mesos://host:port, yarn,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>                              <span class="ex">k8s://https://host:port,</span> or local <span class="er">(</span><span class="ex">Default:</span> local<span class="pp">[</span><span class="ss">*</span><span class="pp">]</span><span class="kw">)</span><span class="bu">.</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>En nuestro caso el programa que ejecutamos es <a href="https://gitlab.eif.urjc.es/data-science-pub/dspub-tutorials/tutorial-sdpd2/-/blob/main/processing/examples/hello-spark.py?ref_type=heads"><code>hello-spark.py</code></a>.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.sql <span class="im">import</span> SparkSession</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    os.environ[<span class="st">"JAVA_HOME"</span>]<span class="op">=</span><span class="st">"/usr/lib/jvm/java-1.17.0-openjdk-amd64"</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Initialize SparkSession</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    spark <span class="op">=</span> SparkSession.builder <span class="op">\</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        .appName(<span class="st">"HelloWorld"</span>) <span class="op">\</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        .master(<span class="st">"spark://localhost:7077"</span>) <span class="op">\</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        .getOrCreate()</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    spark.sparkContext.setLogLevel(<span class="st">"ERROR"</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create an RDD containing numbers from 1 to 10</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    numbers_rdd <span class="op">=</span> spark.sparkContext.parallelize(<span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">1000</span>))</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Count the elements in the RDD</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    count <span class="op">=</span> numbers_rdd.count()</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Count of numbers from 1 to 1000 is: </span><span class="sc">{</span>count<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Stop the SparkSession</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    spark.stop()</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    main()</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Este programa configura internamente un <code>host</code> y un <code>puerto</code> específicos en los que está esperando un <em>manager</em> de Spark que acepta tareas. Para este ejemplo, el servicio Docker Compose está en <code>localhost</code> y escucha en el puerto estándar <code>7077</code>.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">pyspark-351</span><span class="kw">)</span> <span class="ex">jfelipe@helium:~/Docencia/URJC/Grado/SDPD2/lab/podman/spark/pyspark-351$</span> .venv/bin/spark-submit hello-spark.py</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Count</span> of numbers from 1 to 1000 is: 999</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-Damji2020" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">J. S. Damji, B. Wenig, T. Das, y D. Lee, <em>Learning Spark</em>, 2.ª ed. Sebastopol, CA, USA: O’Reilly Media, 2020.</div>
+</div>
+</div>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiado");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiado");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../processing/processing.html" class="pagination-link" aria-label="Procesamiento de Datos">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Procesamiento de Datos</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../processing/flink.html" class="pagination-link" aria-label="Apache Flink">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Apache Flink</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

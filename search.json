@@ -1,0 +1,412 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Tutorial - Sistemas Distribuidos de Procesamiento de Datos 2 - GCID - EIF",
+    "section": "",
+    "text": "Prefacio\nEsta es una colección de tutoriales sobre herramientas y tecnologías utilizadas en la impartición de la asignatura Sistemas Distribuidos de Procesamiento de Datos 2 del Grado en Ciencia e Ingeniería de Datos (EIF, URJC).\nSe ha desarrollado mediante la herramienta Quarto (véase Apéndice D — Quarto). Para aprender maś sobre Quarto visita https://quarto.org/docs/books.",
+    "crumbs": [
+      "Prefacio"
+    ]
+  },
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "1  Introducción",
+    "section": "",
+    "text": "Objetivos generales de la asignatura.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introducción</span>"
+    ]
+  },
+  {
+    "objectID": "dags/dags.html",
+    "href": "dags/dags.html",
+    "title": "DAGs",
+    "section": "",
+    "text": "Esta parte incluye tutoriales sobre tecnologías para creación y gestión de Grafos Directos Acíclicos (DAGs, por sus siglas en inglés) que implementan pipelines de procesamiento de datos.",
+    "crumbs": [
+      "DAGs"
+    ]
+  },
+  {
+    "objectID": "dags/luigi.html",
+    "href": "dags/luigi.html",
+    "title": "2  Luigi",
+    "section": "",
+    "text": "Luigi es una herramienta sencilla para creación de DAGs en lenguaje Python.",
+    "crumbs": [
+      "DAGs",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Luigi</span>"
+    ]
+  },
+  {
+    "objectID": "dags/airflow.html",
+    "href": "dags/airflow.html",
+    "title": "3  Apache Airflow",
+    "section": "",
+    "text": "Apache Airflow es una herramienta completa y potente para creación y gestión de pipelines de procesamiento de datos en Python. Soporta tareas escritas en otros lenguajes y está preparada para escalabilidad.",
+    "crumbs": [
+      "DAGs",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Apache Airflow</span>"
+    ]
+  },
+  {
+    "objectID": "queues/queues.html",
+    "href": "queues/queues.html",
+    "title": "Colas de mensajes",
+    "section": "",
+    "text": "Esta parte incluye tutoriales para instalación y utilización de sistemas de colas de mensajes, que en muchos proyectos actúan como Message Oriented Middleware (MoM).",
+    "crumbs": [
+      "Colas de mensajes"
+    ]
+  },
+  {
+    "objectID": "queues/zmq.html",
+    "href": "queues/zmq.html",
+    "title": "4  ZMQ",
+    "section": "",
+    "text": "Un sistema ligero para implementación de colas de mensajes compatible con más de 40 lenguajes de programación.",
+    "crumbs": [
+      "Colas de mensajes",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>ZMQ</span>"
+    ]
+  },
+  {
+    "objectID": "queues/kafka.html",
+    "href": "queues/kafka.html",
+    "title": "5  Apache Kafka",
+    "section": "",
+    "text": "5.1 Instalación (imagen Docker)\nKafka es un sistema escalable para colas de mensajes de gran envergadura. Soporta particionado de datos, alta disponibilidad y replicabilidad, garantizando un caudal de datos (throughput) elevado y sostenido.\nLa Figura 5.1 muestra un ejemplo típico de utilización de Kafka, que proporciona un sistema base de transmisión de datos entre muchos otros componentes de la infraestructura de ingeniería de datos de una organización.\nLa imagen oficial  para instalar Apache Kafka con Docker es:\nExisten también otras imágenes alternativas:\nPara crear un contenedor Docker que utilice la imagen oficial de Apache Kafka utilizando Podman (véase Apéndice B), primer descargamos la imagen:\nDespués, creamos y ponemos en marcha un contenedor que exponga los puertos necesarios para poder acceder al clúster de Kafka desde fuera de dicho contenedor.",
+    "crumbs": [
+      "Colas de mensajes",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Apache Kafka</span>"
+    ]
+  },
+  {
+    "objectID": "queues/kafka.html#instalación-imagen-docker",
+    "href": "queues/kafka.html#instalación-imagen-docker",
+    "title": "5  Apache Kafka",
+    "section": "",
+    "text": "Documentación\n\n\n\nImagen oficial docker.io/apache/kafka: https://hub.docker.com/r/apache/kafka.\n\n\n\n\nhttps://hub.docker.com/r/apache/kafka.\n\n\n\ndocker.io/bitnami/kafka: Otra imagen para generar contenedores con Kafka muy conocida y con gran cantidad de opciones de configuración. Su documentación en DockerHub también es muy completa, aclarando aspectos importanes para configurar nuestro contenedor con parámetros y valores no estándar.\n\nhttps://hub.docker.com/r/bitnami/kafka.\n\ndocker.io/ubuntu/kafka: La imagen de Kafka oficial de Ubuntu, en caso de que se necesite instalar la misma versión que en este sabor de Linux.\n\nhttps://hub.docker.com/r/ubuntu/kafka.\n\n\n\n$ podman pull docker.io/apache/kafka:latest\n\n$ podman run -dt -p 9092:9092 --name kafka apache/kafka:latest",
+    "crumbs": [
+      "Colas de mensajes",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Apache Kafka</span>"
+    ]
+  },
+  {
+    "objectID": "queues/kafka.html#configuración-por-defecto",
+    "href": "queues/kafka.html#configuración-por-defecto",
+    "title": "5  Apache Kafka",
+    "section": "5.2 Configuración por defecto",
+    "text": "5.2 Configuración por defecto\n\n\n\n\n\n\nDocumentación\n\n\n\nKafka Listeners Explained: https://www.confluent.io/blog/kafka-listeners-explained/.\nKafka: The Definitive Guide, capítulo 2: https://learning.oreilly.com/library/view/kafka-the-definitive/9781492043072/ch02.html.\n\n\nLa configuración por defecto de Kafka utiliza dos puertos de nuestra máquina/contenedor.\n\nEl listener es el servicio que gestiona las peticiones de conexión de los clientes al clúster de Kafka. Por defecto usa el puerto 9092.\nEl controlador es un servicio que gestiona el estado de las particiones y réplicas del clúster de Kafka. Por defecto usa el puerto 9093.\n\nLa Figura 5.2 muestra la utilización del puerto 9092 para aceptar las peticiones de los clientes (tanto productores como consumidores). El puerto 9093 es interno y queda reservado para tareas del plano de gestión.\n\n\n\n\n\n\nFigura 5.2: Kafka escucha por defecto las peticiones de conexión de los clientes en el puerto 9092.",
+    "crumbs": [
+      "Colas de mensajes",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Apache Kafka</span>"
+    ]
+  },
+  {
+    "objectID": "queues/kafka.html#configuraciones-específicas",
+    "href": "queues/kafka.html#configuraciones-específicas",
+    "title": "5  Apache Kafka",
+    "section": "5.3 Configuraciones específicas",
+    "text": "5.3 Configuraciones específicas\n\n\n\n\n\n\nDocumentación\n\n\n\nKafka Listeners Explained (Confluet website): https://www.confluent.io/blog/kafka-listeners-explained/.\nTroubleshooting connections to Apache Kafka Cluster, capítulo 2: https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/.\n\n\nSi necesitamos cambiar los puertos que utiliza nuestro contenedor de Kafka debemos poner mucho cuidado en editar todos los parámetros necesarios.\nLo más conveniente es crear un archivo docker-compose.yml que contenga los valores de configuración de todas las variables implicadas, para evitar ejecutar comandos de varias líneas en la terminal. Una vez preparado, podemos usar el programa podman-compose (que hay que instalar aparte, con APT o similar) para que interprete este archivo de configuración en formato estandarizado y levante nuestro contenedor.\nVeamos un archivo de ejemplo docker-compose.yml para ejecutar nuestro contenedor, de forma que escuche peticiones de clientes en el puerto 9094 y emplee el puerto 9095 para tareas de control.\nservices:\n  kafka:\n    image: apache/kafka:latest\n    container_name: kafka\n    ports:\n      - \"9094:9094\"\n    environment:\n      PUID: 1000\n      PGID: 1000\n      KAFKA_NODE_ID: 1\n      KAFKA_PROCESS_ROLES: broker,controller\n      KAFKA_LISTENERS: PLAINTEXT://kafka:9094,CONTROLLER://kafka:9095\n      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://server.mydomain.com:9094\n      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER\n      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT\n      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9095\n      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1\n      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1\n      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1\n      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0\n      KAFKA_NUM_PARTITIONS: 3\nPor último, ejecutamos el contenedor exponiendo el puerto correspondiente con los datos que hemos incluido en el archivo de configuración.\n$ podman-compose -f docker-compose.yml up -d\n\n\n\n\n\n\nEntendiendo el funcionamiento del listener\n\n\n\nHay que prestar atención en la configuración para modificar correctamente todos los parámetros que ajustan los puertos utilizados por Kafka.\nEn particular, un parámetro de configuración crítico es KAFKA_ADVERTISED_LISTENERS. Por ejemplo, si olvidamos cambiar su valor de configuració y se queda apuntando a otro sitio, como localhost:9092:\nKAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092\nSe producirán errores no evidentes, ya que alcanzaremos correctamente el listener de nuestro clúster pero este informará a los clientes de que deben conectarse a localhost:9092 para interaccionar con el broker de Kafka.\nEn resumen, hay que prestar atención y repasar bien el contenido de todos los parámetros que involucren configuración de puertos en el fichero docker-compose.yml.",
+    "crumbs": [
+      "Colas de mensajes",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Apache Kafka</span>"
+    ]
+  },
+  {
+    "objectID": "queues/kafka.html#ejecución-de-clientes-en-el-contenedor",
+    "href": "queues/kafka.html#ejecución-de-clientes-en-el-contenedor",
+    "title": "5  Apache Kafka",
+    "section": "5.4 Ejecución de clientes en el contenedor",
+    "text": "5.4 Ejecución de clientes en el contenedor\nAcceso a una terminal dentro del contenedor\n$ podman exec --workdir /opt/kafka/bin/ -it kafka sh\nCreación de un nuevo topic \nEste paso no es estrictamente necesario, puesto que la mayoría de las librerías/paquetes para desarrollar productores con Kafka crean automáticamente el topic nuevo en caso de que no exista previamente antes de enviar los datos.\n/opt/kafka/bin $ ./kafka-topics.sh --bootstrap-server localhost:9092 --create --topic test-topic\nCreated topic test-topic.\n**Ejecución de un productor que inserta valores (se detiene con &lt;CTRL+C&gt;).\n/opt/kafka/bin $ ./kafka-console-producer.sh --bootstrap-server localhost:9092 --topic test-topic\n&gt;hello\n&gt;world\n&gt;yikes!\n&gt;^C/opt/kafka/bin $ \nEjecución de un productor que inserta parejas clave:valor \n./kafka-console-producer.sh --bootstrap-server localhost:9092 --topic test-topic --property\n \"parse.key=true\" --property \"key.separator=:\"\n&gt;key1:value1\n&gt;key2:value2\n&gt;key3:value3\n&gt;^C/opt/kafka/bin $  \nEjecución dde un consumidor\n/opt/kafka/bin $ ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test-topic --from-beginning\nhello\nworld\nyikes!\n^CProcessed a total of 3 messages\n/opt/kafka/bin $",
+    "crumbs": [
+      "Colas de mensajes",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Apache Kafka</span>"
+    ]
+  },
+  {
+    "objectID": "queues/kafka.html#paquetes-para-desarrollo-de-clientes",
+    "href": "queues/kafka.html#paquetes-para-desarrollo-de-clientes",
+    "title": "5  Apache Kafka",
+    "section": "5.5 Paquetes para desarrollo de clientes",
+    "text": "5.5 Paquetes para desarrollo de clientes\n\n5.5.1 Python\n\nPaquete oficial de Confluent.\n\nhttps://docs.confluent.io/kafka-clients/python/current/overview.html.\n\nPaquete alternativo.\n\nhttps://pypi.org/project/kafka-python/.",
+    "crumbs": [
+      "Colas de mensajes",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Apache Kafka</span>"
+    ]
+  },
+  {
+    "objectID": "queues/kafka.html#referencias-adicionales",
+    "href": "queues/kafka.html#referencias-adicionales",
+    "title": "5  Apache Kafka",
+    "section": "5.6 Referencias adicionales",
+    "text": "5.6 Referencias adicionales\n\n5.6.1 Documentación oficial de Confluent\nConfluent es la empresa fundada por los creadores originales de Apache Kafka.\n\nFundamentos de la arquitectura de Kafka: https://developer.confluent.io/courses/architecture/get-started/.\nProtocolo de replicación (particiones): https://developer.confluent.io/courses/architecture/data-replication/.\nEl nuevo plano de control de Kafka: https://developer.confluent.io/courses/architecture/control-plane/.\n\nKRaft ha sustituido al componente externo Zookeeper, que se utilizaba antes para gestión del plano de control de los clusters/brokers de Kafka.\n\nProtocolo de grupos de consumo: https://developer.confluent.io/courses/architecture/consumer-group-protocol/.\n\n\n\n\n\n[1] G. Shapira, T. Palino, R. Sivaram, y K. Petty, Kafka: The Definitive Guide. Sebastopol, CA, USA: O’Reilly Media, 2021.",
+    "crumbs": [
+      "Colas de mensajes",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Apache Kafka</span>"
+    ]
+  },
+  {
+    "objectID": "queues/serial.html",
+    "href": "queues/serial.html",
+    "title": "6  Serialización de datos",
+    "section": "",
+    "text": "Este capítulo recoge algunas tecnologías de serialización/aplanamiento de datos de alto rendimiento.",
+    "crumbs": [
+      "Colas de mensajes",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Serialización de datos</span>"
+    ]
+  },
+  {
+    "objectID": "processing/processing.html",
+    "href": "processing/processing.html",
+    "title": "Procesamiento de Datos",
+    "section": "",
+    "text": "Esta parte incluye tutoriales sobre tecnologías de procesamiento de datos distribuido y escalable.",
+    "crumbs": [
+      "Procesamiento de Datos"
+    ]
+  },
+  {
+    "objectID": "processing/spark.html",
+    "href": "processing/spark.html",
+    "title": "7  Apache Spark",
+    "section": "",
+    "text": "7.1 Introducción\nTutorial sobre instalación y configuración de Apache Spark, tecnología de referencia para procesamiento distribuido de datos.\nApache Spark (https://spark.apache.org/) es un motor unificado de procesamiento de datos compatible con múltiples lenguajes de programación (Scala, Java, Python, R) que puede ejecutarse en una sola máquina o en un cluster de computación distribuida. Además, Spark es compatible tanto con el paradigma de procesamiento de datos batch como con el de procesamiento de flujos de datos (streaming), utilizando el mismo motor de procesado en ambos casos.\nEntre sus principales casos de aplicación cabe destacar:\nGracias a su extrema versatilidad y compatiblidad con una larga lista de proyectos y tecnologías habituales en ciencia de datos, Apache Spark se ha convertido en uno de los motores de referencia para el procesamiento de datos en la actualidad, tomando el relevo de Hadoop como solución de referencia en la mayoría de stacks tecnológicos del mercado y arquitecturas en la nube.",
+    "crumbs": [
+      "Procesamiento de Datos",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Apache Spark</span>"
+    ]
+  },
+  {
+    "objectID": "processing/spark.html#introducción",
+    "href": "processing/spark.html#introducción",
+    "title": "7  Apache Spark",
+    "section": "",
+    "text": "Creación de grafos de procesamiento de datos escalables, con una interfaz de programación que simplifica en gran medida la ejecución de tareas en un entorno distribuido.\nPosibilidad de ejecutar consultas ANSI SQL nativas sobre conjuntos de datos en múltiples formatos sin necesidad de utilizar bases de datos o productos de datawarehouse, directamente sobre la información en crudo.\nCapadidad para escalar el cómputo distribuido con datos a nivel de petabytes, sin que sea preciso recurrir a técnicas de filtrado de datos o submuestreo.\nIntegración de un extenso catalogo de algoritmos de aprendizaje máquina adaptados para su ejecución desde en un portátil hasta en entornos distribuidos y tolerantes a fallos con miles de nodos.\n\n\n\n7.1.1 Versiones principales\nA finales de abril de 2025 la versión estable de Spark es la 3.5.5, aunque ya existe una preview de la próxima major version del proyecto, Spark 4.0.0, que se prevé que esté disponible en junio de 2025.\nA pesar de que la nueva versión principal vendrá cargada de muchas novedades, muchos condicionantes, especialmente el de las dependencias software que explicamos en la siguiente sección, obligan a que seamos prudentes y recomendemos utilizar versiones de Spark un poco anteriores y más probadas.\nEn particular, para la asignatura se emplea Spark 3.5.1, puesto que esta versión funciona bien tanto con Python 3.11 como con Java SDK 17 y Scala 2.12. Por ejemplo, Spark 3.5.5 está preparado para utilizar Python 3.12 (que viene instalado por defecto en la mayoría de imágenes Docker disponibles para esa versión), lo que obligaría a utilizar esa misma versión de Python en los restantes componentes de nuestro proyecto de programación, como vemos a continuación.\n\n\n7.1.2 Dependencias software\nAunque Apache Spark evoluciona con gran rapidez y genera nuevas versiones con bastante frecuencia (ciclos de seis meses, en muchos casos), el proyecto es un componente software extremadamente complejo y sensible a un gran número de dependencias muy concretas que se deben satisfacer de forma precisa si aspiramos a que nuestras aplicaciones funcionen correctamente.\n\n\n\n\n\n\nFigura 7.1: Diagrama que muestra la arquitectura funcional de una aplicación Spark en modo driver. Fuente: [1].\n\n\n\nComo podemos observar en la Figura 7.1, una aplicación de Spark que funciona en modo interactivo en nuestro portátil, conectada a un nodo máster que da acceso a un cluster de tres workers de Spark, debe satisfacer múltiples depedencias software para poder funcionar correctamente.\n\nPython: si nuestro programa Spark está escrito en Python es necesario que el número de versión del intérprete (major y minor) sea idéntico tanto en nuestro equipo local (driver) como en el nodo master y todos los nodos worker de Spark.\n\nTambién es importante cerciorarse de que la versión de Spark que utilicemos sea compatible con la versión de Python instalada. Cada versión de Spark suele ser compatible con varias versiones de Python a partir de un determinado número (p.ej. &gt;=3.11), pero no hacia atrás.\nDel mismo modo, si estamos utilizando imágenes de contenedores para desplegar nuestra instalación de Spark, es importante comprobar qué versión de Python está instalada en dicha imagen, ya que determina la versión que debe utilizarse en todos los nodos participantes.\n\nJava Virtual Machine (JVM): aunque nuestro programa esté escrito en Python, Spark lo traduce en tiempo real a código Scala, que debe ser ejecutado sobre una máquina virtual Java (JVM). Resulta curioso comprobar que, debido a este requisito funcional, también es imprescindible que la JVM esté previamente instalada en todos los nodos de la aplicación (driver, master y workers) y que la versión de la JVM coincida en todos ellos.\n\nEn consecuencia, debemos verificar que versión de JVM está instalada en la imagen Docker que vayamos a emplear para el despliegue, y que versión de JVM se ha utilizado para compilar las librerías de Spark que vamos a usar. En algunos casos, se publican varias versiones de la misma imagen Docker de Spark compiladas contra diferentes versiones de JVM para garantizar la compatibilidad con diferentes entornos de producción.\n\nScala: en la asignatura vamos a utilizar, primordialmente, Python como lenguaje de programación. Sin embargo, para ejecutar cualquier ejemplo escrito en Scala es obligatorio verificar:\n\nQue la misma versión de Scala esté instalada en todos los nodos participantes (driver, master y workers).\nQue dicha versión de Scala sea compatible con la JVM instalada en cada sistema.\nQue la versión de Spark utilizada haya sido compilada con la misma versión de Scala instalada en cada sistema.\n\nLibrerías Spark adicionales: si nuestro programa necesita alguna librería adicional de Spark para funcionar es necesario que indiquemos estas dependencias al ejecutar nuestro programa para que se descarguen en los nodos worker del cluster Spark.\n\nTodos estos requisitos también deben cumplirse en caso de que nuestra aplicación se envíe al cluster para ejecutarse de forma desatendida (Spark cluster mode).",
+    "crumbs": [
+      "Procesamiento de Datos",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Apache Spark</span>"
+    ]
+  },
+  {
+    "objectID": "processing/spark.html#imágenes-docker",
+    "href": "processing/spark.html#imágenes-docker",
+    "title": "7  Apache Spark",
+    "section": "7.2 Imágenes Docker",
+    "text": "7.2 Imágenes Docker\n\n7.2.1 Bitnami Spark\n\n\n\n\n\n\nDocumentación\n\n\n\nImagen docker.io/bitnami/spark: https://hub.docker.com/r/bitnami/spark.\n\n\nPara la ejecución de tareas de las prácticas con Apache Spark vamos a emplear como imagen Docker de referencia la generada por Bitnami, una organización que forma parte de VMware Tanzu. Ofrece imágenes bastante populares y que se mantienen muy actualizadas, lo que es positivo en proyectos como Spark con un elevado ritmo de publicación de nuevas versiones. Las imágenes de Bitnami están basadas en minideb, una versión minimalista de Debian GNU/Linux especialmente concebida para contenedores.\nEn particular, usaremos la versión 3.5.1 de esta imagen, que incluye dicha versión de Apache Spark junto con Python 3.11 y la JVM 17.\nLa imagen permite alterar los valores por defecto de muchas variables de configuración para Spark. La mejor manera de hacer esto es usando un archivo Docker Compose para definir nuestros contenedores.\nEl siguiente extracto de código muestra un ejemplo de cómo incluir estas variables de configuración en un archivo docker-compose.yaml.\nspark:\n  ...\n  environment:\n    - SPARK_MODE=master\n    - SPARK_MASTER_URL=spark://spark-master:7077\n  ...\n\n\n7.2.2 Jupyter Spark\nExiste otra imagen del proyecto Jupyter (1), que incluye un entorno para ejecución de notebooks de Python, pero está muy desactualizada. No aconsejamos su utilización.\n\nhttps://medium.com/@leodrl9/easy-way-setting-up-apache-spark-master-workers-and-jupyterlab-with-docker-compose-ee267d431b5d.\n\nComo alternativa (2), se puede generar un contenedor personalizado que incluya Python y los paquetes de Jupyter Lab, junto con una versión actualizada de Spark.\n\nhttps://medium.com/datalex/running-pyspark-on-jupyter-notebook-with-docker-on-mac-a-step-by-step-guide-0b2e3bad1930.",
+    "crumbs": [
+      "Procesamiento de Datos",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Apache Spark</span>"
+    ]
+  },
+  {
+    "objectID": "processing/spark.html#entorno-docker-compose",
+    "href": "processing/spark.html#entorno-docker-compose",
+    "title": "7  Apache Spark",
+    "section": "7.3 Entorno Docker Compose",
+    "text": "7.3 Entorno Docker Compose\nPor último, recogemos todos los pasos a seguir para configurar un entorno completo de ejecución de Spark en modo cluster, pero utilizando Docker Compose para generar todos los contenedores en nuestra máquina local.\n\n7.3.1 Instalación y/o activación de la JVM\nPuesto que la imagen bitnami/spark usa la JVM 17, debemos usar la misma versión de máquina virtual de Java en nuestro sistema anfitrión. La mejor opción es instalar Java OpenJDK 17 mediante los paquetes APT estándar de los repositorios oficiales de Ubuntu.\n\nInstalación OpenJDK 17 en Ubuntu 24.04.\n\n\n\n\n\n\n\nActivación del entorno Java\n\n\n\nSi tenemos varias JVM instaladas simultáneamente en nuestro sistema, entonces debemos seleccionar la que queremos usar con nuestros programas. Hay dos opciones para esto, mostradas en el tutorial enlazado arriba:\n\nConfigurar los valores de las variables de entorno JAVA_HOME y PATH (si ejecutamos desde la terminal) o sólo de la primera variable (dentro de nuestros programas Python) para que se selecciones la versión correcta de la JVM.\nEjecutar el comando sudo update-java-alternatives (requiere privilegios de root) para seleccionar la JVM a emplear. Esta configuración será efectiva en todo el sistema (no solo en esa terminal), hasta que volvamos a modificar la configuración.\n\n\n\n\n\n7.3.2 Creación de un nuevo proyecto uv\nDebemos crear en nuestra máquina anfitriona un nuevo proyecto Python utilizando la versión del intérprete que coincide con la instalada en la imagen que usan los contenedores.\n$ uv init pyspark-351 --python 3.11\n$ cd pyspark-351\n\n\n7.3.3 Instalación de pyspark en el anfitrión\nAhora instalamos la versión del paquete Python pyspark que coincide también con la instalada en la imagen Docker que estamos usando.\n$ uv venv\n$ source .venv/bin/activate\n(pyspark-351)$ uv pip install pyspark==3.5.1\n\n\n7.3.4 Ejecución de servicios del entorno Docker Compose\nPor último, creamos un archivo docker-compose.yaml con toda la información de configuración de nuestro entorno, que consta de un nodo Spark actuando como master o coordinador y otro nodo como worker.\nversion: '3.7'\n\nservices:\n  spark:\n    #image: bitnami/spark:3.5.1\n    build: .\n    environment:\n      - SPARK_MODE=master\n      - SPARK_RPC_AUTHENTICATION_ENABLED=no\n      - SPARK_RPC_ENCRYPTION_ENABLED=no\n      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no\n      - SPARK_SSL_ENABLED=no\n      - SPARK_USER=spark\n    ports:\n      - '8080:8080'\n      - '7077:7077'\n\n    # MUST BE OFF VPN FOR THIS TO WORK\n    extra_hosts:\n      - \"host.docker.internal:${HOST_IP}\"\n  spark-worker:\n    #image: bitnami/spark:3.5.1\n    build: .\n    environment:\n      - SPARK_MODE=worker\n      - SPARK_MASTER_URL=spark://spark:7077\n      - SPARK_WORKER_MEMORY=2G\n      - SPARK_WORKER_CORES=2\n      - SPARK_RPC_AUTHENTICATION_ENABLED=no\n      - SPARK_RPC_ENCRYPTION_ENABLED=no\n      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no\n      - SPARK_SSL_ENABLED=no\n      - SPARK_USER=spark\n    extra_hosts:\n      - \"host.docker.internal:${HOST_IP}\"\nY también creamos otro fichero Dockerfile en el que podemos configurar a nuestro gusto la imagen de Spark que usamos en los contenedores. Por ejemplo, aquí se muestra cómo copiar dentro del contenedor un fichero log4j2.properties para configurar el nivel de detalle de los logs que imprime Spark por la terminal.\nFROM bitnami/spark:3.5.1\n\n# Optional: custom logging\nCOPY log4j2.properties /opt/bitnami/spark/conf/log4j2.properties\n\n# Since the cluster will deserialize your app and run it, the cluster need similar depenecies.\n# ie. if your app uses numpy\n#RUN pip install numpy\nEl contenido del fichero log4j2.properties es el siguiente.\nmstatus = error\nname = PropertiesConfig\n\n# Define appenders\nappender.console.type = Console\nappender.console.name = ConsoleAppender\nappender.console.target = SYSTEM_ERR\nappender.console.layout.type = PatternLayout\nappender.console.layout.pattern = %d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n\n\n# Set root logger level\nrootLogger.level = error\nrootLogger.appenderRef.stdout.ref = ConsoleAppender\n\n# Set PySpark logging level to INFO to see PySpark-specific logs\nlogger.pyspark.name = org.apache.spark.api.python\nlogger.pyspark.level = warn\nlogger.pyspark.appenderRef.console.ref = ConsoleAppender\n\n# Set Spark SQL logging level to INFO for visibility into Spark SQL operations\nlogger.sparksql.name = org.apache.spark.sql.execution\nlogger.sparksql.level = warn\nlogger.sparksql.appenderRef.console.ref = ConsoleAppender\n\n# Optionally, adjust the logging level for other Spark components as needed\nlogger.sparkcontext.name = org.apache.spark.SparkContext\nlogger.sparkcontext.level = warn\nlogger.sparkcontext.appenderRef.console.ref = ConsoleAppender\n\nAdemás, debemos configurar una variable de entorno HOST_IP con la dirección IP de la máquina anfitriona en la que se ejecutan los contenedores.\n$ export HOST_IP=10.20.30.40\nEjecutamos los contenedores desde una terminal con Podman.\n$ podman-compose up --build\nSi no se producen errores, deberíamos tener dos contenedores ejecutándose como se muestra a continuación.\n(pyspark-351) jfelipe@helium:~/Docencia/URJC/Grado/SDPD2/lab/podman/spark/pyspark-351$ podman ps\nCONTAINER ID  IMAGE                                      COMMAND               CREATED         STATUS         PORTS                                           NAMES\n52d2b63c7f24  localhost/pyspark-351_spark:latest         /opt/bitnami/scri...  17 seconds ago  Up 15 seconds  0.0.0.0:7077-&gt;7077/tcp, 0.0.0.0:8080-&gt;8080/tcp  pyspark-351_spark_1\n6b51de37c28d  localhost/pyspark-351_spark-worker:latest  /opt/bitnami/scri...  16 seconds ago  Up 14 seconds                                                  pyspark-351_spark-worker_1\n\n\n7.3.5 Ejecución del ejemplo de prueba\nAl instalar el paquete pyspark en nuestro entorno virtual de Python para este proyecto se han incluido múltiples ejecutables en el directorio .venv/bin/, con programas que permiten interactuar con instalaciones de Spark desde Python.\nEl ejecutable .venv/bin/spark-submit permite enviar a un cluster de Spark un programa Python para su ejecución.\n(pyspark-351) jfelipe@helium:~/Docencia/URJC/Grado/SDPD2/lab/podman/spark/pyspark-351$ .venv/bin/spark-submit --help\nUsage: spark-submit [options] &lt;app jar | python file | R file&gt; [app arguments]\nUsage: spark-submit --kill [submission ID] --master [spark://...]\nUsage: spark-submit --status [submission ID] --master [spark://...]\nUsage: spark-submit run-example [options] example-class [example args]\n\nOptions:\n  --master MASTER_URL         spark://host:port, mesos://host:port, yarn,\n                              k8s://https://host:port, or local (Default: local[*]).\n...\nEn nuestro caso el programa que ejecutamos es hello-spark.py.\nfrom pyspark.sql import SparkSession\nimport os\n\ndef main():\n    os.environ[\"JAVA_HOME\"]=\"/usr/lib/jvm/java-1.17.0-openjdk-amd64\"\n    # Initialize SparkSession\n    spark = SparkSession.builder \\\n        .appName(\"HelloWorld\") \\\n        .master(\"spark://localhost:7077\") \\\n        .getOrCreate()\n    spark.sparkContext.setLogLevel(\"ERROR\")\n    \n\n    # Create an RDD containing numbers from 1 to 10\n    numbers_rdd = spark.sparkContext.parallelize(range(1, 1000))\n\n    # Count the elements in the RDD\n    count = numbers_rdd.count()\n\n    print(f\"Count of numbers from 1 to 1000 is: {count}\")\n\n    # Stop the SparkSession\n    spark.stop()\n\n\nif __name__ == \"__main__\":\n    main()\nEste programa configura internamente un host y un puerto específicos en los que está esperando un manager de Spark que acepta tareas. Para este ejemplo, el servicio Docker Compose está en localhost y escucha en el puerto estándar 7077.\n(pyspark-351) jfelipe@helium:~/Docencia/URJC/Grado/SDPD2/lab/podman/spark/pyspark-351$ .venv/bin/spark-submit hello-spark.py\n...\nCount of numbers from 1 to 1000 is: 999\n\n\n\n\n[1] J. S. Damji, B. Wenig, T. Das, y D. Lee, Learning Spark, 2.ª ed. Sebastopol, CA, USA: O’Reilly Media, 2020.",
+    "crumbs": [
+      "Procesamiento de Datos",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Apache Spark</span>"
+    ]
+  },
+  {
+    "objectID": "processing/flink.html",
+    "href": "processing/flink.html",
+    "title": "8  Apache Flink",
+    "section": "",
+    "text": "Tutorial sobre Apache Flink para procesamiento de flujos de datos en tiempo real.",
+    "crumbs": [
+      "Procesamiento de Datos",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Apache Flink</span>"
+    ]
+  },
+  {
+    "objectID": "processing/dask.html",
+    "href": "processing/dask.html",
+    "title": "9  Dask",
+    "section": "",
+    "text": "Tutorial sobre Dask, una herramienta para procesamiento distribuido de datos en Python.",
+    "crumbs": [
+      "Procesamiento de Datos",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Dask</span>"
+    ]
+  },
+  {
+    "objectID": "sia/scalable-ia.html",
+    "href": "sia/scalable-ia.html",
+    "title": "IA escalable",
+    "section": "",
+    "text": "Esta parte incluye tutoriales sobre tecnologías para implementación de algoritmos y modelos de IA y aprendizaje máquina escalables y de alto rendimiento.",
+    "crumbs": [
+      "IA escalable"
+    ]
+  },
+  {
+    "objectID": "sia/torch.html",
+    "href": "sia/torch.html",
+    "title": "10  Torch",
+    "section": "",
+    "text": "Tutorial sobre implementación de modelos de IA escalables con Torch.",
+    "crumbs": [
+      "IA escalable",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Torch</span>"
+    ]
+  },
+  {
+    "objectID": "sia/tensorflow.html",
+    "href": "sia/tensorflow.html",
+    "title": "11  TensorFlow",
+    "section": "",
+    "text": "Tutorial sobre uso de TensorFlow para implementar modelos de IA escables.",
+    "crumbs": [
+      "IA escalable",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>TensorFlow</span>"
+    ]
+  },
+  {
+    "objectID": "sia/llms.html",
+    "href": "sia/llms.html",
+    "title": "12  LLMs",
+    "section": "",
+    "text": "Tutorial introductorio a Large Language Modelos (LLMs) y modelos fundacionales.",
+    "crumbs": [
+      "IA escalable",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>LLMs</span>"
+    ]
+  },
+  {
+    "objectID": "sia/h2o.html",
+    "href": "sia/h2o.html",
+    "title": "13  H2O",
+    "section": "",
+    "text": "Tutorial sobre H2O.ai https://h2o.ai/es/.",
+    "crumbs": [
+      "IA escalable",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>H2O</span>"
+    ]
+  },
+  {
+    "objectID": "summary.html",
+    "href": "summary.html",
+    "title": "14  Conclusiones",
+    "section": "",
+    "text": "Conclusiones y punteros a material adicional.",
+    "crumbs": [
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Conclusiones</span>"
+    ]
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "Referencias",
+    "section": "",
+    "text": "[1] D.\nE. Knuth, “Literate programming,” Comput. J., vol.\n27, no. 2, pp. 97–111, May 1984, doi: 10.1093/comjnl/27.2.97.\nAvailable: https://doi.org/10.1093/comjnl/27.2.97\n\n\n[2] J.\nS. Damji, B. Wenig, T. Das, and D. Lee, Learning spark, 2nd ed.\nSebastopol, CA, USA: O’Reilly Media, 2020.\n\n\n[3] G.\nShapira, T. Palino, R. Sivaram, and K. Petty, Kafka: The definitive\nguide. Sebastopol, CA, USA: O’Reilly Media, 2021.",
+    "crumbs": [
+      "Referencias"
+    ]
+  },
+  {
+    "objectID": "app/uv.html",
+    "href": "app/uv.html",
+    "title": "Apéndice A — Astral uv",
+    "section": "",
+    "text": "Un gestor eficiente de entornos virtuales Python escrito en Rust.",
+    "crumbs": [
+      "Apéndices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Astral uv</span>"
+    ]
+  },
+  {
+    "objectID": "app/podman.html",
+    "href": "app/podman.html",
+    "title": "Apéndice B — Podman",
+    "section": "",
+    "text": "B.1 Instalación\nHerramienta de gestión de contendores virtuales compatible con varias tecnologías como Docker y Kubernetes. En la asignatura utilizamos dos programas:\nUna característica distintiva de Podman es que se centra en la creación de contenedores rootless, que no precisan de privilegios de superusuario para su generación y gestión.",
+    "crumbs": [
+      "Apéndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Podman</span>"
+    ]
+  },
+  {
+    "objectID": "app/podman.html#instalación",
+    "href": "app/podman.html#instalación",
+    "title": "Apéndice B — Podman",
+    "section": "",
+    "text": "Fuente\n\n\n\nPodman Installation Instructions: https://podman.io/docs/installation.\n\n\n\nB.1.1 Ubuntu\nPara instalar Podman en Ubuntu 24.04 ejecutamos en una terminal:\n$ sudo apt install podman\nPara instalar Podman Compose:\n$ sudo apt install podman-compose\n\n\n\n\n\n\nAuto-configuración de Podman\n\n\n\nEl instalador de Podman se encarga de ejecutar algunas acciones de configuración importantes durante el proceso de instalación. En particular, efectúa una serie de operaciones de configuración a partir de la información de los usuarios y grupos ya registrados en el sistema, para que puedan descargar imágenes, ejecutar contenedores y otras operaciones de gestión sin privilegios de superusuario.\nSi instalas Podman y luego añades usuarios nuevos a tu sistema, puede que estos no puedan ejecutar Podman correctamente. Tendrás que solucionar manualmente el problema (ver enlace al final de esta llamada) o reinstalar de nuevo el paquete (sin eliminarlo) para que se vuelvan a efectuar esas operaciones de configuración necesarias para los nuevos usuarios.\nMás info: https://github.com/containers/podman/blob/main/docs/tutorials/rootless_tutorial.md",
+    "crumbs": [
+      "Apéndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Podman</span>"
+    ]
+  },
+  {
+    "objectID": "app/podman.html#operaciones-básicas",
+    "href": "app/podman.html#operaciones-básicas",
+    "title": "Apéndice B — Podman",
+    "section": "B.2 Operaciones básicas",
+    "text": "B.2 Operaciones básicas\n\n\n\n\n\n\nFuente\n\n\n\nGet Started with Podman: https://podman.io/get-started.\n\n\n\nB.2.1 Ayuda\nPodman consta de un comando principal podman y un conjunto de subcomandos, como pull, search o run (como ocurre con git). Podemos obtener ayuda sobre cómo ejecutar el comando principal o uno de los subcomandos desde la terminal.\n$ podman --help\n$ podman &lt;subcomando&gt; --help\nSi necesitamos más informción podemos consultar las páginas del manual.\n$ man podman\n$ man podman-&lt;subcomando&gt;\n\n\n\n\n\n\nTip\n\n\n\nFíjate bien en que para abrir la página del manual de un subcomando de podman tienes que añadir un guión alto - entre podman y el nombre del subcomando.\nPor ejemplo: man podman-pull.\n\n\n\n\nB.2.2 Descarga de imágenes\nLa primera operación básica es descargar una imagen desde un repositorio de imágenes para creación de contenedores. Por ejemplo, una opción habitual es la biblioteca de imágenes de Docker: https://hub.docker.com/.\nSupongamos que queremos descargar la imágen del servidor HTTP Apache del repositorio oficial:\n\nhttps://hub.docker.com/_/httpd\n\nLo único que tenemos que recordar es que Podman no asume por defecto (salvo si lo configuramos para que se comporte así) que vamos a descargar una imagen de la biblioteca oficial de Docker. Así que tenemos que anteponer el prefijo docker.io/ a la ruta que aparece en la documentación de Docker Hub para efectuar la operación pull y descargar la imagen.\nTeniendo esto en cuenta, descargamos la imagen usando Podman:\n$ podman pull docker.io/library/httpd\nSi no estamos seguros de qué imagen queremos descargar, se puede usar el subcomando search para buscar por palabra clave. Por ejemplo, para buscar imágenes que mencionen la cadena httpd en el registro de la biblioteca docker.io:\n$ podman search docker.io/library/httpd\nUna vez que descargues varias imágenes, puedes obtener una lista de todas las que has obtenido ya en tu máquina con el subcomando images.\n$ podman images\nREPOSITORY                              TAG                IMAGE ID      CREATED        SIZE\ndocker.io/apache/kafka                  latest             12b98f0f2c1f  2 weeks ago    427 MB\ndocker.io/library/postgres              16-alpine          1e8624fe3776  6 weeks ago    278 MB\ndocker.io/library/nginx                 latest             97662d24417b  7 weeks ago    196 MB\ndocker.io/library/mysql                 5.7                5107333e08a8  15 months ago  520 MB\ndocker.io/bytemark/smtp                 latest             cd5c77c3bcd8  6 years ago    135 MB\n\n\nB.2.3 Ejecución de contenedores\nAhora vemos un ejemplo de cómo invocar el subcomando run en la terminal con varias opciones para ejecutar un servidor httpd Apache básico, que muestra la página de inicio en la dirección http://localhost:8080 de nuestra máquina anfitriona.\n$ podman run -dt -p 8080:80/tcp docker.io/library/httpd\n\nLa opción -d evita que se vuelque la información de log sobre el progreso de la creación del contenedor en la terminal y simplemente muestra el ID del contenedor creado al acabar de ejecutar el comando.\nLa opción -t añade una pseudo terminal al contenedor que permitirá ejecutar comandos arbitrarios en una shell interactiva conectándonos al interior del contenedor (ver más abajo).\nLa opción -p &lt;puerto-host&gt;:&lt;puerto-cont&gt;/&lt;protocolo&gt; indica una redirección de un puerto interno del contenedor (en este caso el 80/tcp) a un puerto externo de la máquina anfitriona.\n\nPor tanto, si ahora abrimos un navegador y cargamos la dirección http://localhost:8080 la petición será redirigida al puerto TCP 80 del contenedor y el servidor web devolverá la página de inicio. Alternativamente puedes usar curl o wget en la terminal para comprobar que funciona:\n$ curl http://localhost:8080\n\n\nB.2.4 Listado de contenedores\nEl comando podman ps muestra una lista de todos los contenedores en ejecución en el momento actual.\n$ podman ps\nSi queremos obtener un listado de todos los contenedores creados, con independencia del estado en que estén, podemos usar la opción -a:\n$ podman ps -a\n\n\nB.2.5 Inspeccionar un contenedor en ejecución\nPara recuperar información sobre los metadatos y detalles de configuración de un contenedor en ejecución se puede usar podman inspect.\n$ podman inspect &lt;id-contenedor&gt;\n\n\n\n\n\n\nTip\n\n\n\nMuchos subcomandos de Podman admiten la opción -l o --latest para referirse al contenedor ejecutado más recientemente.\nPor ejemplo: podman inspect -l mostrará metadatos e información descriptiva del último contenedor ejecutado.\n\n\n\n\nB.2.6 Consulta de los logs de un contenedor\nPara imprimir por pantalla el contenido del archivo log con el registro de ejecución de un contenedor usamos el subcomando podman logs. Es importante recordar que, por defecto, este comando imprime toda la información del archivo de log de un contenedor. Por ello, si vamos a inspeccionar estos datos de forma interactiva es recomendable redirigir la salida de este subcomando a un paginador como less.\nOtra alternativa muy útil es usar la opción --tail &lt;N-lines&gt; para imprimir tan sólo las \\(N\\) últimas líneas del fichero de log. Por ejemplo:\n$ podman logs --tail 10 -l\nImprime las 10 últimas líneas del fichero de log de ejecución del último contenedor ejecutado. Otras opción interesante son --follow=true y --since.\n$ podman logs --follow=true --since 10m ctrID\nEste comando muestra las líneas de log de actividad del contenedor ctrID generadas durante los últimos 10 minutos y se queda en escucha para ir mostrando las nuevas líneas que se generen a partir de la ejecución de este comando.\nEs recomendable consultar podman logs --help o bien la página del manual de este subcomando para descubrir otras opciones interesantes al invocarlo.\n\n\nB.2.7 Identificador de proceso de un contenedor\nEl subcomando podman top permite inspeccionar los pid de los procesos en ejecución dentro del contendor. Por ejemplo, después de ejecutar el contenedor docker.io/library/httpd.\n$ podman top -l\nUSER        PID         PPID        %CPU        ELAPSED       TTY         TIME        COMMAND\nroot        1           0           0.000       6.531561782s  pts/0       0s          httpd -DFOREGROUND \nwww-data    3           1           0.000       6.531619962s  pts/0       0s          httpd -DFOREGROUND \nwww-data    4           1           0.000       6.531657752s  pts/0       0s          httpd -DFOREGROUND \nwww-data    6           1           0.000       6.531693141s  pts/0       0s          httpd -DFOREGROUND\n\n\nB.2.8 Detener de un contenedor\nEl subcomando podman stop es el opuesto de podman run, ya que detiene un contenedor. Por ejemplo, para parar la ejecución del último contenedor ejecutado:\n$ podman stop -l\nSi no se han producido errores, partir de ese momento el subcomando podman ps ya no debería listar el contenedor detenido. Si necesitamos consultar la lista de todos los contenedores que han sido creados alguna vez, incluyendo los que están actualmente detenidos, podemos ejecutar:\n$ podman ps -a\n\n\nB.2.9 Eliminación de contenedores\nCuando paramos el contenedor sus archivos y almacenamiento asociados en disco todavía permanecen en la máquina, de modo que se pueda reanudar rápidamente su ejecución más adelante.\nPara eliminar por completo todos los archivos y almacenamiento en disco asociados a un contenedor ejecutamos el comando:\n$ podman rm &lt;ctrID&gt;\n\n\n\n\n\n\nPrecaución\n\n\n\nCuidado porque la operación de borrado de los archivos y almacenamiento asociados a un contenedor no es reversible.",
+    "crumbs": [
+      "Apéndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Podman</span>"
+    ]
+  },
+  {
+    "objectID": "app/podman.html#ejecución-permanente-de-contenedores",
+    "href": "app/podman.html#ejecución-permanente-de-contenedores",
+    "title": "Apéndice B — Podman",
+    "section": "B.3 Ejecución permanente de contenedores",
+    "text": "B.3 Ejecución permanente de contenedores\nEs importante resaltar que los contenedores generados con Podman se crean, por defecto, en el espacio de usuario sin privilegios de root. Una consecuencia observable de esto es que cuando cerramos el proceso de terminal dentro del cual hemos ejecutado los comando de Podman, pasado un cierto tiempo, los contenedores se detienen.\nSi pretendemos ejecutar varios contenedores de forma permanente, por ejemplo, para levantar varios servicios a los que accedan los alumnos que realizan prácticas en una asignatura, debemos garantizar que las terminales desde las que hemos lanzado los contenedores se mantienen activas.\nUna forma de solventar esta limitación es emplear tmux, screen, byobu o un programa similar multiplexor de terminal, que permita desconectarse y reconectarse a la sesión de terminal manteniéndola activa, aun cuando nuestro usuario se desconecte de la máquina (por ejemplo, si accedemos remotamente mediante SSH).",
+    "crumbs": [
+      "Apéndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Podman</span>"
+    ]
+  },
+  {
+    "objectID": "app/podman.html#creación-de-entornos-con-varios-contenedores",
+    "href": "app/podman.html#creación-de-entornos-con-varios-contenedores",
+    "title": "Apéndice B — Podman",
+    "section": "B.4 Creación de entornos con varios contenedores",
+    "text": "B.4 Creación de entornos con varios contenedores\nPara utilizar un fichero docker-compose.yml en el que podamos incluir la configuración de uno o varios contenedores y ejecutar todos simultáneamente en un entorno común, podemos ejecutar:\n$ podman-compose -f docker-compose.yml up -d",
+    "crumbs": [
+      "Apéndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Podman</span>"
+    ]
+  },
+  {
+    "objectID": "app/podman.html#referencias",
+    "href": "app/podman.html#referencias",
+    "title": "Apéndice B — Podman",
+    "section": "B.5 Referencias",
+    "text": "B.5 Referencias\n\nDocumentación de Podman: https://podman.io/docs.\nPodman Compose en GitHub: https://github.com/containers/podman-compose.",
+    "crumbs": [
+      "Apéndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Podman</span>"
+    ]
+  },
+  {
+    "objectID": "app/vscode.html",
+    "href": "app/vscode.html",
+    "title": "Apéndice C — VS Code",
+    "section": "",
+    "text": "Tutorial sobre configuración y extensiones de Visual Studio Code (o Codium) para la asignatura.",
+    "crumbs": [
+      "Apéndices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>VS Code</span>"
+    ]
+  },
+  {
+    "objectID": "app/quarto.html",
+    "href": "app/quarto.html",
+    "title": "Apéndice D — Quarto",
+    "section": "",
+    "text": "Una tecnología para creación de documentos de programación literaria [1] compatible con varios lenguajes (Python, R, Julia, Observable), capaz de generar salida en varios formatos, por ejemplo, HTML o PDF (via LaTeX).\n\n\n\n\n[1] D. E. Knuth, «Literate Programming», Comput. J., vol. 27, n.º 2, pp. 97-111, 1984, doi: 10.1093/comjnl/27.2.97. Disponible en: https://doi.org/10.1093/comjnl/27.2.97",
+    "crumbs": [
+      "Apéndices",
+      "<span class='chapter-number'>D</span>  <span class='chapter-title'>Quarto</span>"
+    ]
+  }
+]
