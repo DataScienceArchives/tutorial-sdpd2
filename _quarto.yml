@@ -1,10 +1,6 @@
 project:
   type: book
-  output-dir: public
-  resources:
-    - "css/"
-    - "js/"
-    - "*.html"
+  output-dir: docs
   preview:
     port: 9001
     browser: true
