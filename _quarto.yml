@@ -36,7 +36,7 @@ book:
     - references.qmd
   appendices:
     - app/uv.qmd
-    - app/podman.qmd
+    - app/docker.qmd
     - app/vscode.qmd
     - app/quarto.qmd
 
