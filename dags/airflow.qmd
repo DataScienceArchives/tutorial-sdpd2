@@ -55,3 +55,15 @@ La @fig-airflow-webui-dag-task muestra la vista detallada de una tarea específi
 ![Vista de información sobre una tarea perteneciente al DAG de ejemplo.](img/Airflow-WebUI-DAG-task.png){#fig-airflow-webui-dag-task width=95%}
 
 ### Ejecución de DAGs de ejemplo
+
+Cuando nos encontramos dentro de la vista detallada de un DAG, como se muestra en la 
+@fig-airflow-webui-dag-activate podemos activar o desactivar el DAG mediante un botón deslizador ubicado
+cerca de su nombre. Al activar el DAG, este comenzará a ejecutarse según la programación definida en su configuración, y se podrán visualizar las ejecuciones en tiempo real a través de la interfaz web.
+Además, también se puede ejecutar el DAG manualmente, para lo que podemos pulsar el botón "Trigger"
+situado en la parte superior derecha de la interfaz, lo que iniciará una ejecución inmediata del DAG, independientemente de su programación regular. Esta funcionalidad es útil para pruebas o para ejecutar tareas de forma ad-hoc.
+
+![Vista de activación de un DAG en la interfaz web de Airflow.](img/Airflow-WebUI-DAG-activate.png){#fig-airflow-webui-dag-activate width=95%}
+
+Una vez concluida la ejecución de un DAG, se puede revisar el estado de cada tarea y acceder a los logs para verificar que todo se ha ejecutado correctamente o para identificar posibles errores. La @fig-airflow-webui-dag-task-exec-log muestra la vista de logs de una tarea específica, donde se pueden revisar los mensajes generados durante su ejecución.
+
+![Vista de registros de ejecución (*logs*) de una tarea en la interfaz web de Airflow.](img/Airflow-WebUI-DAG-task-exec-log.png){#fig-airflow-webui-dag-task-exec-log width=95%}
