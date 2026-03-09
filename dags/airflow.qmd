@@ -33,10 +33,25 @@ Si pulsamos sobre el botón "DAGs" en la columna de la izquierda, se accede a un
 
 Haciendo clic en el nombre de un DAG específico, se accede a una vista detallada de ese DAG, donde se pueden ver las tareas que lo componen, su estado actual, y realizar acciones específicas sobre cada tarea. Esta vista se muestra en la @fig-airflow-webui-dag-graph, incluyendo un gráfico de dependencias entre las tareas, un listado de las tareas con su estado actual, y opciones para ejecutar o revisar los logs de cada tarea.
 
-![Vista detallada de un DAG en la interfaz web de Airflow](img/Airflow-WebUI-DAG-graph.png){#fig-airflow-webui-dag-graph width=95%}
+![Vista detallada de un DAG en la interfaz web de Airflow.](img/Airflow-WebUI-DAG-graph.png){#fig-airflow-webui-dag-graph width=95%}
+
+Por otro lado, si pulsamos sobre la vista "Cuadrícula" la interfaz muestra una serie de pestañas que
+proporcionan información sobre el DAG, incluyendo un resumen general, información sobre las ejecuciones
+recientes, el listado de tareas incluidas en el DAG, el calendario de próximas ejecuciones programadas o
+los archivos de registro (*logs*) asociados a cada tarea. Esta vista se muestra en la @fig-airflow-webui-dag-grid.
+
+![Vista de cuadrícula de un DAG en la interfaz web de Airflow.](img/Airflow-WebUI-DAG-grid.png){#fig-airflow-webui-dag-grid width=95%}
 
 
-### Ejecución de tareas y seguimiento
+## Ejecución de tareas y seguimiento
 
+La interfaz web de Airflow también permite gestionar la ejecuión de tareas y DAGs, revisando el
+estado en que se encuentran (en cola, en ejecución, finalizada con éxito, fallida, etc.), así como para
+acceder a los logs de cada ejecución, facilitando la identificación de posibles errores o causas de fallos
+en la ejecución de tareas. Además, la interfaz permite programar ejecuciones futuras de DAGs, configurar alertas y notificaciones, y gestionar los recursos del sistema para optimizar la ejecución de las tareas.
 
-## Ejecución de DAGs de ejemplo
+La @fig-airflow-webui-dag-task muestra la vista detallada de una tarea específica dentro de un DAG.
+
+![Vista de información sobre una tarea perteneciente al DAG de ejemplo.](img/Airflow-WebUI-DAG-task.png){#fig-airflow-webui-dag-task width=95%}
+
+### Ejecución de DAGs de ejemplo
