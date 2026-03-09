@@ -317,11 +317,11 @@ div.csl-indent {
    
   <ul>
   <li><a href="#estructura-de-un-dag-en-airflow" id="toc-estructura-de-un-dag-en-airflow" class="nav-link active" data-scroll-target="#estructura-de-un-dag-en-airflow"><span class="header-section-number">3.1</span> Estructura de un DAG en Airflow</a></li>
-  <li><a href="#la-interfaz-web-de-usuario" id="toc-la-interfaz-web-de-usuario" class="nav-link" data-scroll-target="#la-interfaz-web-de-usuario"><span class="header-section-number">3.2</span> La interfaz web de usuario</a>
+  <li><a href="#la-interfaz-web-de-usuario" id="toc-la-interfaz-web-de-usuario" class="nav-link" data-scroll-target="#la-interfaz-web-de-usuario"><span class="header-section-number">3.2</span> La interfaz web de usuario</a></li>
+  <li><a href="#ejecución-de-tareas-y-seguimiento" id="toc-ejecución-de-tareas-y-seguimiento" class="nav-link" data-scroll-target="#ejecución-de-tareas-y-seguimiento"><span class="header-section-number">3.3</span> Ejecución de tareas y seguimiento</a>
   <ul class="collapse">
-  <li><a href="#ejecución-de-tareas-y-seguimiento" id="toc-ejecución-de-tareas-y-seguimiento" class="nav-link" data-scroll-target="#ejecución-de-tareas-y-seguimiento"><span class="header-section-number">3.2.1</span> Ejecución de tareas y seguimiento</a></li>
+  <li><a href="#ejecución-de-dags-de-ejemplo" id="toc-ejecución-de-dags-de-ejemplo" class="nav-link" data-scroll-target="#ejecución-de-dags-de-ejemplo"><span class="header-section-number">3.3.1</span> Ejecución de DAGs de ejemplo</a></li>
   </ul></li>
-  <li><a href="#ejecución-de-dags-de-ejemplo" id="toc-ejecución-de-dags-de-ejemplo" class="nav-link" data-scroll-target="#ejecución-de-dags-de-ejemplo"><span class="header-section-number">3.3</span> Ejecución de DAGs de ejemplo</a></li>
   </ul>
 </nav>
     </div>
@@ -385,16 +385,60 @@ Figura&nbsp;3.2: Vista de DAGs en la interfaz web de Airflow
 <img src="img/Airflow-WebUI-DAG-graph.png" class="img-fluid figure-img" style="width:95.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-airflow-webui-dag-graph-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;3.3: Vista detallada de un DAG en la interfaz web de Airflow
+Figura&nbsp;3.3: Vista detallada de un DAG en la interfaz web de Airflow.
 </figcaption>
 </figure>
 </div>
-<section id="ejecución-de-tareas-y-seguimiento" class="level3" data-number="3.2.1">
-<h3 data-number="3.2.1" class="anchored" data-anchor-id="ejecución-de-tareas-y-seguimiento"><span class="header-section-number">3.2.1</span> Ejecución de tareas y seguimiento</h3>
+<p>Por otro lado, si pulsamos sobre la vista “Cuadrícula” la interfaz muestra una serie de pestañas que proporcionan información sobre el DAG, incluyendo un resumen general, información sobre las ejecuciones recientes, el listado de tareas incluidas en el DAG, el calendario de próximas ejecuciones programadas o los archivos de registro (<em>logs</em>) asociados a cada tarea. Esta vista se muestra en la <a href="#fig-airflow-webui-dag-grid" class="quarto-xref">Figura&nbsp;<span>3.4</span></a>.</p>
+<div id="fig-airflow-webui-dag-grid" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-airflow-webui-dag-grid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="img/Airflow-WebUI-DAG-grid.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-airflow-webui-dag-grid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;3.4: Vista de cuadrícula de un DAG en la interfaz web de Airflow.
+</figcaption>
+</figure>
+</div>
 </section>
-</section>
-<section id="ejecución-de-dags-de-ejemplo" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="ejecución-de-dags-de-ejemplo"><span class="header-section-number">3.3</span> Ejecución de DAGs de ejemplo</h2>
+<section id="ejecución-de-tareas-y-seguimiento" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="ejecución-de-tareas-y-seguimiento"><span class="header-section-number">3.3</span> Ejecución de tareas y seguimiento</h2>
+<p>La interfaz web de Airflow también permite gestionar la ejecuión de tareas y DAGs, revisando el estado en que se encuentran (en cola, en ejecución, finalizada con éxito, fallida, etc.), así como para acceder a los logs de cada ejecución, facilitando la identificación de posibles errores o causas de fallos en la ejecución de tareas. Además, la interfaz permite programar ejecuciones futuras de DAGs, configurar alertas y notificaciones, y gestionar los recursos del sistema para optimizar la ejecución de las tareas.</p>
+<p>La <a href="#fig-airflow-webui-dag-task" class="quarto-xref">Figura&nbsp;<span>3.5</span></a> muestra la vista detallada de una tarea específica dentro de un DAG.</p>
+<div id="fig-airflow-webui-dag-task" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-airflow-webui-dag-task-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="img/Airflow-WebUI-DAG-task.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-airflow-webui-dag-task-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;3.5: Vista de información sobre una tarea perteneciente al DAG de ejemplo.
+</figcaption>
+</figure>
+</div>
+<section id="ejecución-de-dags-de-ejemplo" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="ejecución-de-dags-de-ejemplo"><span class="header-section-number">3.3.1</span> Ejecución de DAGs de ejemplo</h3>
+<p>Cuando nos encontramos dentro de la vista detallada de un DAG, como se muestra en la <a href="#fig-airflow-webui-dag-activate" class="quarto-xref">Figura&nbsp;<span>3.6</span></a> podemos activar o desactivar el DAG mediante un botón deslizador ubicado cerca de su nombre. Al activar el DAG, este comenzará a ejecutarse según la programación definida en su configuración, y se podrán visualizar las ejecuciones en tiempo real a través de la interfaz web. Además, también se puede ejecutar el DAG manualmente, para lo que podemos pulsar el botón “Trigger” situado en la parte superior derecha de la interfaz, lo que iniciará una ejecución inmediata del DAG, independientemente de su programación regular. Esta funcionalidad es útil para pruebas o para ejecutar tareas de forma ad-hoc.</p>
+<div id="fig-airflow-webui-dag-activate" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-airflow-webui-dag-activate-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="img/Airflow-WebUI-DAG-activate.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-airflow-webui-dag-activate-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;3.6: Vista de activación de un DAG en la interfaz web de Airflow.
+</figcaption>
+</figure>
+</div>
+<p>Una vez concluida la ejecución de un DAG, se puede revisar el estado de cada tarea y acceder a los logs para verificar que todo se ha ejecutado correctamente o para identificar posibles errores. La <a href="#fig-airflow-webui-dag-task-exec-log" class="quarto-xref">Figura&nbsp;<span>3.7</span></a> muestra la vista de logs de una tarea específica, donde se pueden revisar los mensajes generados durante su ejecución.</p>
+<div id="fig-airflow-webui-dag-task-exec-log" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-airflow-webui-dag-task-exec-log-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="img/Airflow-WebUI-DAG-task-exec-log.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-airflow-webui-dag-task-exec-log-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;3.7: Vista de registros de ejecución (<em>logs</em>) de una tarea en la interfaz web de Airflow.
+</figcaption>
+</figure>
+</div>
 
 
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
@@ -402,6 +446,7 @@ Figura&nbsp;3.3: Vista detallada de un DAG en la interfaz web de Airflow
 <div class="csl-left-margin">[1] </div><div class="csl-right-inline">J. de Ruiter, I. Cabral, K. Geusebroek, D. van der Ende, y B. Harenslak, <em>Data Pipelines with Apache Airflow</em>, 2.ª ed. Shelter Island, NY, USA: Mannning Publications, 2026. Disponible en: <a href="https://learning.oreilly.com/library/view/data-pipelines-with/9781633436374/">https://learning.oreilly.com/library/view/data-pipelines-with/9781633436374/</a></div>
 </div>
 </div>
+</section>
 </section>
 
 </main> <!-- /main -->
